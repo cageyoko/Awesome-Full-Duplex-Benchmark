@@ -16,7 +16,7 @@ Sections follow **what is scored**, not the repo or the venue:
 
 1. Open a PR that updates **both** `README.md` (English) and `README.zh-CN.md` (Chinese). The two files must stay in sync.
 2. Put the row in the class that matches **what is scored**. Duplicate the row if it is first-class in a second class (for example FDB v1 under Interaction and Timing).
-3. Fill Class / Subclass, Granularity, Protocol, Stimulus, Open. Use `—` or `?` instead of inventing a value. Keep these tags in English in both files.
+3. Fill Class / Subclass, Granularity, Protocol, Stimulus (`Synthetic` / `Real` / `Mixed` / `Text`), Open (`Code + data` / `Code + weights` / `Code` / `Data` / `—`). Use `—` or `?` instead of inventing a value. Keep these tags in English in both files. Do not write `ZH / EN` unless both languages have a released eval split.
 4. Link arXiv / venue, code, data, and demo when they exist. Do not link a GitHub that is only a paper PDF.
 5. In **Headline metrics**, write the short names and the direction (↑/↓) if it is not obvious. If TOR flips by subclass, say so.
 6. If you have run the bench, a one-line caveat in [Metric notes](README.md#metric-notes) / [指标注意事项](README.zh-CN.md#指标注意事项) is more useful than another adjective in the title.

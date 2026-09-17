@@ -26,8 +26,8 @@ Welcome to PR if you want to add a benchmark, metric definition, or a note about
 |:--|:--|:--|
 | **Granularity** | System / Component | Full dialogue product vs a detector (EOT, interruption, semantic VAD). |
 | **Protocol** | Replay / Interactive / Offline / Event / Challenge | Stream recorded audio; live examiner; score existing outputs; emit timestamps; frozen shared task. |
-| **Stimulus** | Synthetic / Real / Mixed | TTS; human (often dual-channel); both, or real speech with synthetic overlap. |
-| **Open** | Code + data / Code / Data / — | What was released. `—` = paper only. |
+| **Stimulus** | Synthetic / Real / Mixed / Text | TTS; human (often dual-channel); both; STT/transcript turns with no waveform. |
+| **Open** | Code + data / Code + weights / Code / Data / — | What was released. `—` = paper only. |
 
 **Year** is the year of first public release (arXiv v1, blog, or repo).
 
@@ -52,8 +52,8 @@ One row is one protocol. Empty cell = not the main claim, not "impossible".
 | **TurnBench** | | EOT | | ✓ | | | ✓ | | | | | Component | Event | |
 | **Talking Turns** | | ✓ | ✓ | ✓ | | | | | | | | Component | Offline | |
 | **HumDial-FDBench** | | | | ✓ | | ✓ | ✓ | | | | | System | Challenge | ✓ |
-| **Easy-Turn** | | ✓ | | | | | | | | | | Component | Event | ✓ |
-| **TurnSense** | | EOU | | | | | | | | | | Component | Event | ✓ |
+| **Easy-Turn** | | ✓ | ✓ | wait | | | | | | | | Component | Event | ✓ |
+| **TurnSense** | | EOU | | | | | | | | | | Component | Offline | |
 
 \* Optional judge. Timing-only v1.5 runs are still valid.
 
@@ -85,15 +85,17 @@ When to speak, when to stop, when not to speak. Do **not** average these subclas
 | **HumDial-FDBench** | 2026 | Interrupt / Reject | System | Challenge | Real | Code + data | ZH / EN | Interrupt, reject, delay; Final = 0.4 / 0.4 / 0.2 | [arXiv](https://arxiv.org/abs/2604.21406)/[Github](https://github.com/ASLP-lab/HumDial-FDBench)/[Dataset](https://huggingface.co/datasets/ASLP-lab/HumDial-FDBench)/[Challenge](https://aslp-lab.github.io/HumDial-Challenge/) |
 | **SID-Bench** | 2026 | Interrupt / Filter | Component | Event | Real | Code + data | EN / ZH | FIR, IRL, APT | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 | **TurnBench** | 2026 | Turn (EOT) / Interrupt | Component | Event | Real | Code + data | EN | EOT / INT recall, false positives, timing; public leaderboard | [arXiv](https://arxiv.org/abs/2608.25218)/[Site](https://turnbench.sesame.com/)/[Github](https://github.com/SesameAILabs/turnbench)/[Blog](https://www.sesame.com/blog/turnbench) |
-| **Talking Turns** | 2025 | Turn / Backchannel / Interrupt | Component | Offline | Real | — | EN | Turn change, backchannel, interruption, floor-taking interruption | [arXiv](https://arxiv.org/abs/2503.01174) |
-| **Easy-Turn** | 2025 | Turn | Component | Event | Mixed | Code | ZH / EN | Turn-taking detection (model paper with eval) | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
-| **TurnSense** | 2025 | Turn (EOU) | Component | Event | Real | Code + weights | EN / ZH | End-of-utterance detection | [Github](https://github.com/latishab/turnsense)/[Dataset](https://huggingface.co/datasets/latishab/turns-2k) |
+| **Talking Turns** | 2025 | Turn / Backchannel / Interrupt | Component | Offline | Real | — | EN | Turn change, backchannel, interruption, floor-taking interruption. Eval platform promised; no public scorer found. | [arXiv](https://arxiv.org/abs/2503.01174)/[Apple](https://machinelearning.apple.com/research/talking-turns) |
+| **Easy-Turn** | 2025 | Turn / Backchannel | Component | Event | Mixed | Code + data | ZH | Four-state detector (complete / incomplete / backchannel / wait) on its own testset, not a system replay bench | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
+| **TurnSense** (latishab) | 2025 | Turn (EOU) | Component | Offline | Text | Code + weights | EN | Text-level EOU on TURNS-2K. Not Bairong/brgroup TurnSense (ZH/EN audio). | [Github](https://github.com/latishab/turnsense)/[Dataset](https://huggingface.co/datasets/latishab/turns-2k) |
 
 \* FDB-Zh currently ships a subset of v1.5 (user backchannel is the one commonly released). Do not assume full ZH parity with English.
 
 v1.5 overlap scenes: user interruption, user backchannel, talking to others, background speech. Papers often report **responsive** (stop and answer) vs **floor-holding** (filter overlap and keep talking). Neither is universally better; the bench is descriptive.
 
 TurnBench interruption scoring on the **user** channel works for endpointers and cascaded systems. Native full-duplex models that speak while listening need a different interrupt protocol.
+
+Easy-Turn `wait` (“shut up” / “please stop”) is closer to Interrupt than to Turn. The coverage-map `wait` mark is that state, not a HumDial-style reject track.
 
 Also reports interaction signals: [FDB v3](#4-task-and-tools) (take-turn / interrupt), [MTR-DuplexBench](#3-multi-turn-content) (conversational features).
 
@@ -107,7 +109,7 @@ How fast, and on what rhythm. A system can be fast and still barge in on pauses.
 |:--|:-:|:--|:-:|:-:|:-:|:-:|:-:|:--|:-:|
 | **Game-Time** | 2025 | Tempo | System | Interactive | Synthetic | Data | EN | Instruction following under timing, tempo, synchronized speech | [arXiv](https://arxiv.org/abs/2509.26388)/[Demo](https://ga642381.github.io/Game-Time)/[Dataset](https://huggingface.co/datasets/gametime-benchmark/gametime) |
 | **Full-Duplex-Bench v1** | 2025 | Response latency | System | Replay | Mixed | Code + data | EN / ZH | Takeover latency, usually on takeover samples only | [arXiv](https://arxiv.org/abs/2503.04721)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
-| **Full-Duplex-Bench v1.5** | 2025 | Stop / response latency | System | Replay | Mixed | Code + data | EN / ZH | Stop and response latency under overlap | [arXiv](https://arxiv.org/abs/2507.23159)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **Full-Duplex-Bench v1.5** | 2025 | Stop / response latency | System | Replay | Mixed | Code + data | EN / ZH* | Stop and response latency under overlap | [arXiv](https://arxiv.org/abs/2507.23159)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **FD-Bench** | 2025 | Response / stop latency | System | Replay | Synthetic | Code + data | EN | IRD, FSED, ERT, EIT | [arXiv](https://arxiv.org/abs/2507.19040)/[Github](https://github.com/pengyizhou/FD-Bench) |
 | **SID-Bench** | 2026 | Stop latency | Component | Event | Real | Code + data | EN / ZH | IRL; APT folds false and slow interrupts | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 | **HumDial-FDBench** | 2026 | Response latency | System | Challenge | Real | Code + data | ZH / EN | Delay score (0.2 of Final) | [arXiv](https://arxiv.org/abs/2604.21406)/[Github](https://github.com/ASLP-lab/HumDial-FDBench) |
@@ -123,7 +125,7 @@ Whether the words stay right after the system has spoken, been interrupted, or b
 
 | Title | Year | Subclass | Granularity | Protocol | Stimulus | Open | Lang | Headline metrics | Resources |
 |:--|:-:|:--|:-:|:-:|:-:|:-:|:-:|:--|:-:|
-| **Full-Duplex-Bench v2** | 2025 | Instruction / Correction / Entity / Safety | System | Interactive | Examiner | Code + data | EN | Turn-taking fluency, instruction following, correction, entity tracking, safety | [arXiv](https://arxiv.org/abs/2510.07838)/[ACL](https://aclanthology.org/2026.acl-short.4)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **Full-Duplex-Bench v2** | 2025 | Instruction / Correction / Entity / Safety | System | Interactive | Mixed | Code + data | EN | Turn-taking fluency, instruction following, correction, entity tracking, safety | [arXiv](https://arxiv.org/abs/2510.07838)/[ACL](https://aclanthology.org/2026.acl-short.4)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **MTR-DuplexBench** | 2025 | Instruction / Safety (+ dialogue quality) | System | Replay + segment | Mixed | — | EN | Per-turn conversational / quality / IF / safety after segmentation | [arXiv](https://arxiv.org/abs/2511.10262) |
 | **Full-Duplex-Bench v1** | 2025 | Post-interrupt | System | Replay | Mixed | Code + data | EN / ZH | Interruption GPT score (optional judge) | [arXiv](https://arxiv.org/abs/2503.04721)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 
@@ -150,7 +152,7 @@ Whether the audio is usable. This class is thin in the literature and should sti
 | Title | Year | Subclass | Granularity | Protocol | Stimulus | Open | Lang | Headline metrics | Resources |
 |:--|:-:|:--|:-:|:-:|:-:|:-:|:-:|:--|:-:|
 | **FD-Bench** | 2025 | Intelligibility / Noise | System | Replay | Synthetic | Code + data | EN | WER; NIRate on noise gaps | [arXiv](https://arxiv.org/abs/2507.19040)/[Github](https://github.com/pengyizhou/FD-Bench) |
-| **Full-Duplex-Bench v1.5** | 2025 | Prosody | System | Replay | Mixed | Code + data | EN / ZH | Optional prosody adaptation under overlap | [arXiv](https://arxiv.org/abs/2507.23159)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **Full-Duplex-Bench v1.5** | 2025 | Prosody | System | Replay | Mixed | Code + data | EN / ZH* | Optional prosody adaptation under overlap | [arXiv](https://arxiv.org/abs/2507.23159)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **SID-Bench** | 2026 | Noise | Component | Event | Real | Code + data | EN / ZH | Noise / silence APT and FIR | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 
 Still missing as first-class public benches: echo / channel bleed, no-response rate, dropouts, and a standalone intelligibility set for model speech. Product evals should add them even when the paper list cannot.
@@ -163,11 +165,12 @@ Not training corpora. These are the audio sources benches actually stream or ann
 
 | Title | Year | Used by | Open | Notes | Resources |
 |:--|:-:|:--|:-:|:--|:-:|
-| **CANDOR** | 2023 | FDB v1 pause / turn | Data | Real two-party conversations; FDB slices pauses and smooth turns | [Paper](https://www.pnas.org/doi/10.1073/pnas.2218522120) |
-| **ICC** (In Conversation Corpus) | 2024 | FDB v1 backchannel | Data | Multi-listener backchannel timing; FDB uses TOR / frequency / JSD against this distribution | [Umair et al.](https://arxiv.org/abs/2402.02889) |
+| **CANDOR** | 2023 | FDB v1 pause / turn | Data | Real two-party English video-chat conversations (Science Advances, not PNAS); FDB slices pauses and smooth turns | [Paper](https://www.science.org/doi/10.1126/sciadv.adf3197) |
+| **ICC** (In Conversation Corpus) | 2024 | FDB v1 backchannel | Data | Multi-listener backchannel timing on 55 ICC turns. Full ICC is IRB-restricted; FDB uses the released backchannel responses | [Umair et al.](https://arxiv.org/abs/2410.16044)/[ACL](https://aclanthology.org/2024.findings-emnlp.909/) |
 | **FDB synthetic sets** | 2025 | FDB v1 interruption / pause | Code + data | TTS user audio with controlled pauses and barge-in | [Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **Full-Duplex-Bench-zh** | 2025 | FDB v1 / partial v1.5 | Data | Chinese replay sets; subset coverage ≠ English | [Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
-| **TURNS-2K** | 2025 | TurnSense | Data | EOU labels | [Hugging Face](https://huggingface.co/datasets/latishab/turns-2k) |
+| **TURNS-2K** | 2025 | TurnSense (latishab) | Data | 2k English **text** turns with binary EOU labels, not waveform | [Hugging Face](https://huggingface.co/datasets/latishab/turns-2k) |
+| **Easy Turn testset** | 2025 | Easy-Turn | Data | 800 clips: complete/incomplete 300 each, backchannel/wait 100 each; real + TTS, human-labeled states | [Github](https://github.com/ASLP-lab/Easy-Turn) |
 | **HumDial-FDBench audio** | 2026 | HumDial | Data | Dual-channel real conversations with overlap | [Hugging Face](https://huggingface.co/datasets/ASLP-lab/HumDial-FDBench) |
 | **TurnBench conversations** | 2026 | TurnBench | Data | ~30 h studio dual-channel, 6 conversation types, 3-annotator EOT / INT | [Viewer](https://turnbench.sesame.com/conversations) |
 | **Game-Time tasks** | 2025 | Game-Time | Data | Timing / tempo / sync game-like tasks | [Hugging Face](https://huggingface.co/datasets/gametime-benchmark/gametime) |

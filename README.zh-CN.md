@@ -26,8 +26,8 @@
 |:--|:--|:--|
 | **Granularity** | System / Component | 完整对话产品 vs 检测器（EOT、打断、语义 VAD）。 |
 | **Protocol** | Replay / Interactive / Offline / Event / Challenge | 回放录音；现场考官；只打已有输出；输出时间戳；冻结的共享任务。 |
-| **Stimulus** | Synthetic / Real / Mixed | TTS；真人（常见双通道）；两者都有，或在真人语音上插入合成重叠。 |
-| **Open** | Code + data / Code / Data / — | 实际发布了什么。`—` = 只有论文。 |
+| **Stimulus** | Synthetic / Real / Mixed / Text | TTS；真人（常见双通道）；两者都有；只有 STT/转写、没有波形。 |
+| **Open** | Code + data / Code + weights / Code / Data / — | 实际发布了什么。`—` = 只有论文。 |
 
 **Year** 取首次公开年份（arXiv v1、博客或仓库）。
 
@@ -52,8 +52,8 @@
 | **TurnBench** | | EOT | | ✓ | | | ✓ | | | | | Component | Event | |
 | **Talking Turns** | | ✓ | ✓ | ✓ | | | | | | | | Component | Offline | |
 | **HumDial-FDBench** | | | | ✓ | | ✓ | ✓ | | | | | System | Challenge | ✓ |
-| **Easy-Turn** | | ✓ | | | | | | | | | | Component | Event | ✓ |
-| **TurnSense** | | EOU | | | | | | | | | | Component | Event | ✓ |
+| **Easy-Turn** | | ✓ | ✓ | wait | | | | | | | | Component | Event | ✓ |
+| **TurnSense** | | EOU | | | | | | | | | | Component | Offline | |
 
 \* 可选 judge。只跑 v1.5 时序仍然有效。
 
@@ -85,15 +85,17 @@
 | **HumDial-FDBench** | 2026 | Interrupt / Reject | System | Challenge | Real | Code + data | ZH / EN | 打断、拒识、时延；Final = 0.4 / 0.4 / 0.2 | [arXiv](https://arxiv.org/abs/2604.21406)/[Github](https://github.com/ASLP-lab/HumDial-FDBench)/[Dataset](https://huggingface.co/datasets/ASLP-lab/HumDial-FDBench)/[Challenge](https://aslp-lab.github.io/HumDial-Challenge/) |
 | **SID-Bench** | 2026 | Interrupt / Filter | Component | Event | Real | Code + data | EN / ZH | FIR、IRL、APT | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 | **TurnBench** | 2026 | Turn（EOT）/ Interrupt | Component | Event | Real | Code + data | EN | EOT / INT 召回、假阳、时序；有公开榜 | [arXiv](https://arxiv.org/abs/2608.25218)/[Site](https://turnbench.sesame.com/)/[Github](https://github.com/SesameAILabs/turnbench)/[Blog](https://www.sesame.com/blog/turnbench) |
-| **Talking Turns** | 2025 | Turn / Backchannel / Interrupt | Component | Offline | Real | — | EN | 轮次切换、附和、打断、抢话打断 | [arXiv](https://arxiv.org/abs/2503.01174) |
-| **Easy-Turn** | 2025 | Turn | Component | Event | Mixed | Code | ZH / EN | 轮次检测（模型论文带评测） | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
-| **TurnSense** | 2025 | Turn（EOU） | Component | Event | Real | Code + weights | EN / ZH | 句末检测 | [Github](https://github.com/latishab/turnsense)/[Dataset](https://huggingface.co/datasets/latishab/turns-2k) |
+| **Talking Turns** | 2025 | Turn / Backchannel / Interrupt | Component | Offline | Real | — | EN | 轮次切换、附和、打断、抢话打断。论文承诺开源评测台，未见可用的公开 scorer | [arXiv](https://arxiv.org/abs/2503.01174)/[Apple](https://machinelearning.apple.com/research/talking-turns) |
+| **Easy-Turn** | 2025 | Turn / Backchannel | Component | Event | Mixed | Code + data | ZH | 四态检测器（complete / incomplete / backchannel / wait），自有 testset，不是系统回放 bench | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
+| **TurnSense**（latishab） | 2025 | Turn（EOU） | Component | Offline | Text | Code + weights | EN | 文本级 EOU，数据是 TURNS-2K。不是百融/brgroup 的 TurnSense（中英音频） | [Github](https://github.com/latishab/turnsense)/[Dataset](https://huggingface.co/datasets/latishab/turns-2k) |
 
 \* FDB-Zh 目前只放出 v1.5 的子集（常见的是用户附和）。不要默认中文覆盖等于英文。
 
 v1.5 重叠场景：用户打断、用户附和、对旁人说话、背景语音。论文里常见 **responsive**（停下并回答）vs **floor-holding**（滤掉重叠、继续说）。没有绝对更好；bench 是描述性的。
 
 TurnBench 在 **用户** 通道上打打断，对 endpoint 和级联系统成立。边听边说的原生全双工模型需要另一套打断协议。
+
+Easy-Turn 的 `wait`（「闭嘴 / 停」）更接近 Interrupt，不是 Turn。覆盖图里的 `wait` 指这个状态，不是 HumDial 那种拒识轨。
 
 也报告交互信号的：[FDB v3](#4-任务与工具)（接话 / 打断）、[MTR-DuplexBench](#3-多轮内容)（会话特征）。
 
@@ -107,7 +109,7 @@ TurnBench 在 **用户** 通道上打打断，对 endpoint 和级联系统成立
 |:--|:-:|:--|:-:|:-:|:-:|:-:|:-:|:--|:-:|
 | **Game-Time** | 2025 | Tempo | System | Interactive | Synthetic | Data | EN | 时限 / 语速 / 同步说话下的指令遵循 | [arXiv](https://arxiv.org/abs/2509.26388)/[Demo](https://ga642381.github.io/Game-Time)/[Dataset](https://huggingface.co/datasets/gametime-benchmark/gametime) |
 | **Full-Duplex-Bench v1** | 2025 | Response latency | System | Replay | Mixed | Code + data | EN / ZH | takeover 时延，通常只在 takeover 样本上算 | [arXiv](https://arxiv.org/abs/2503.04721)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
-| **Full-Duplex-Bench v1.5** | 2025 | Stop / response latency | System | Replay | Mixed | Code + data | EN / ZH | 重叠下的停止 / 响应时延 | [arXiv](https://arxiv.org/abs/2507.23159)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **Full-Duplex-Bench v1.5** | 2025 | Stop / response latency | System | Replay | Mixed | Code + data | EN / ZH* | 重叠下的停止 / 响应时延 | [arXiv](https://arxiv.org/abs/2507.23159)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **FD-Bench** | 2025 | Response / stop latency | System | Replay | Synthetic | Code + data | EN | IRD、FSED、ERT、EIT | [arXiv](https://arxiv.org/abs/2507.19040)/[Github](https://github.com/pengyizhou/FD-Bench) |
 | **SID-Bench** | 2026 | Stop latency | Component | Event | Real | Code + data | EN / ZH | IRL；APT 把误打断和慢打断折在一起 | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 | **HumDial-FDBench** | 2026 | Response latency | System | Challenge | Real | Code + data | ZH / EN | 时延分（Final 的 0.2） | [arXiv](https://arxiv.org/abs/2604.21406)/[Github](https://github.com/ASLP-lab/HumDial-FDBench) |
@@ -123,7 +125,7 @@ TurnBench 在 **用户** 通道上打打断，对 endpoint 和级联系统成立
 
 | 标题 | 年 | 小类 | 粒度 | Protocol | Stimulus | Open | 语言 | 核心指标 | 资源 |
 |:--|:-:|:--|:-:|:-:|:-:|:-:|:-:|:--|:-:|
-| **Full-Duplex-Bench v2** | 2025 | Instruction / Correction / Entity / Safety | System | Interactive | Examiner | Code + data | EN | 轮次流畅度、指令遵循、纠错、实体追踪、安全 | [arXiv](https://arxiv.org/abs/2510.07838)/[ACL](https://aclanthology.org/2026.acl-short.4)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **Full-Duplex-Bench v2** | 2025 | Instruction / Correction / Entity / Safety | System | Interactive | Mixed | Code + data | EN | 轮次流畅度、指令遵循、纠错、实体追踪、安全 | [arXiv](https://arxiv.org/abs/2510.07838)/[ACL](https://aclanthology.org/2026.acl-short.4)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **MTR-DuplexBench** | 2025 | Instruction / Safety（+ 对话质量） | System | Replay + 切轮 | Mixed | — | EN | 切轮后逐轮打会话 / 质量 / 指令遵循 / 安全 | [arXiv](https://arxiv.org/abs/2511.10262) |
 | **Full-Duplex-Bench v1** | 2025 | Post-interrupt | System | Replay | Mixed | Code + data | EN / ZH | 打断 GPT 分（可选 judge） | [arXiv](https://arxiv.org/abs/2503.04721)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 
@@ -150,7 +152,7 @@ v3 不流畅标签：填充词、停顿、犹豫、假开始、自我修正。�
 | 标题 | 年 | 小类 | 粒度 | Protocol | Stimulus | Open | 语言 | 核心指标 | 资源 |
 |:--|:-:|:--|:-:|:-:|:-:|:-:|:-:|:--|:-:|
 | **FD-Bench** | 2025 | Intelligibility / Noise | System | Replay | Synthetic | Code + data | EN | WER；噪声间隙上的 NIRate | [arXiv](https://arxiv.org/abs/2507.19040)/[Github](https://github.com/pengyizhou/FD-Bench) |
-| **Full-Duplex-Bench v1.5** | 2025 | Prosody | System | Replay | Mixed | Code + data | EN / ZH | 重叠下可选的韵律适应 | [arXiv](https://arxiv.org/abs/2507.23159)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **Full-Duplex-Bench v1.5** | 2025 | Prosody | System | Replay | Mixed | Code + data | EN / ZH* | 重叠下可选的韵律适应 | [arXiv](https://arxiv.org/abs/2507.23159)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **SID-Bench** | 2026 | Noise | Component | Event | Real | Code + data | EN / ZH | 噪声 / 静音上的 APT 与 FIR | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 
 仍缺独立公开 bench 的：回声 / 串音、无响应率、中途掉线、以及针对模型语音的可懂度集。产品评测即使论文列表填不满，也该自己补。
@@ -163,11 +165,12 @@ v3 不流畅标签：填充词、停顿、犹豫、假开始、自我修正。�
 
 | 标题 | 年 | 被谁用 | Open | 说明 | 资源 |
 |:--|:-:|:--|:-:|:--|:-:|
-| **CANDOR** | 2023 | FDB v1 停顿 / 轮次 | Data | 真人双方对话；FDB 切出停顿与平滑轮次 | [Paper](https://www.pnas.org/doi/10.1073/pnas.2218522120) |
-| **ICC**（In Conversation Corpus） | 2024 | FDB v1 附和 | Data | 多听者附和时序；FDB 用 TOR / 频率 / JSD 对齐该分布 | [Umair et al.](https://arxiv.org/abs/2402.02889) |
+| **CANDOR** | 2023 | FDB v1 停顿 / 轮次 | Data | 真人英语视频对话（Science Advances，不是 PNAS）；FDB 切出停顿与平滑轮次 | [Paper](https://www.science.org/doi/10.1126/sciadv.adf3197) |
+| **ICC**（In Conversation Corpus） | 2024 | FDB v1 附和 | Data | 55 段上的多听者附和时序。完整 ICC 受 IRB 限制；FDB 用的是放出的附和响应 | [Umair et al.](https://arxiv.org/abs/2410.16044)/[ACL](https://aclanthology.org/2024.findings-emnlp.909/) |
 | **FDB synthetic sets** | 2025 | FDB v1 打断 / 停顿 | Code + data | 带受控停顿和抢话的 TTS 用户音频 | [Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **Full-Duplex-Bench-zh** | 2025 | FDB v1 / 部分 v1.5 | Data | 中文回放集；子集覆盖 ≠ 英文 | [Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
-| **TURNS-2K** | 2025 | TurnSense | Data | EOU 标签 | [Hugging Face](https://huggingface.co/datasets/latishab/turns-2k) |
+| **TURNS-2K** | 2025 | TurnSense（latishab） | Data | 2k 条英文 **文本** 轮次 + 二值 EOU，不是波形 | [Hugging Face](https://huggingface.co/datasets/latishab/turns-2k) |
+| **Easy Turn testset** | 2025 | Easy-Turn | Data | 800 条：complete/incomplete 各 300，backchannel/wait 各 100；真人 + TTS，人工标状态 | [Github](https://github.com/ASLP-lab/Easy-Turn) |
 | **HumDial-FDBench audio** | 2026 | HumDial | Data | 带重叠的双通道真人对话 | [Hugging Face](https://huggingface.co/datasets/ASLP-lab/HumDial-FDBench) |
 | **TurnBench conversations** | 2026 | TurnBench | Data | 约 30 小时棚内双通道，6 类对话，三人标注 EOT / INT | [Viewer](https://turnbench.sesame.com/conversations) |
 | **Game-Time tasks** | 2025 | Game-Time | Data | 时序 / 语速 / 同步类游戏任务 | [Hugging Face](https://huggingface.co/datasets/gametime-benchmark/gametime) |
