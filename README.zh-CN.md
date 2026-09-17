@@ -52,7 +52,7 @@
 | **TurnBench** | | EOT | | ✓ | | | ✓ | | | | | Component | Event | |
 | **Talking Turns** | | ✓ | ✓ | ✓ | | | | | | | | Component | Offline | |
 | **HumDial-FDBench** | | | | ✓ | | ✓ | ✓ | | | | | System | Challenge | ✓ |
-| **Easy-Turn** | | ✓ | ✓ | wait | | | | | | | | Component | Event | ✓ |
+| **Easy-Turn** | | ✓ | ✓ | ✓ | | | | | | | | Component | Event | ✓ |
 | **TurnSense** | | EOU | | | | | | | | | | Component | Offline | |
 
 \* 可选 judge。只跑 v1.5 时序仍然有效。
@@ -86,7 +86,7 @@
 | **SID-Bench** | 2026 | Interrupt / Filter | Component | Event | Real | Code + data | EN / ZH | FIR、IRL、APT | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 | **TurnBench** | 2026 | Turn（EOT）/ Interrupt | Component | Event | Real | Code + data | EN | EOT / INT 召回、假阳、时序；有公开榜 | [arXiv](https://arxiv.org/abs/2608.25218)/[Site](https://turnbench.sesame.com/)/[Github](https://github.com/SesameAILabs/turnbench)/[Blog](https://www.sesame.com/blog/turnbench) |
 | **Talking Turns** | 2025 | Turn / Backchannel / Interrupt | Component | Offline | Real | — | EN | 轮次切换、附和、打断、抢话打断。论文承诺开源评测台，未见可用的公开 scorer | [arXiv](https://arxiv.org/abs/2503.01174)/[Apple](https://machinelearning.apple.com/research/talking-turns) |
-| **Easy-Turn** | 2025 | Turn / Backchannel | Component | Event | Mixed | Code + data | ZH | 四态检测器（complete / incomplete / backchannel / wait），自有 testset，不是系统回放 bench | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
+| **Easy-Turn** | 2025 | Turn / Backchannel / Interrupt | Component | Event | Mixed | Code + data | ZH / EN | 四态检测器（complete / incomplete / backchannel / wait），自有 testset，不是系统回放 bench | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
 | **TurnSense**（latishab） | 2025 | Turn（EOU） | Component | Offline | Text | Code + weights | EN | 文本级 EOU，数据是 TURNS-2K。不是百融/brgroup 的 TurnSense（中英音频） | [Github](https://github.com/latishab/turnsense)/[Dataset](https://huggingface.co/datasets/latishab/turns-2k) |
 
 \* FDB-Zh 目前只放出 v1.5 的子集（常见的是用户附和）。不要默认中文覆盖等于英文。
@@ -94,8 +94,6 @@
 v1.5 重叠场景：用户打断、用户附和、对旁人说话、背景语音。论文里常见 **responsive**（停下并回答）vs **floor-holding**（滤掉重叠、继续说）。没有绝对更好；bench 是描述性的。
 
 TurnBench 在 **用户** 通道上打打断，对 endpoint 和级联系统成立。边听边说的原生全双工模型需要另一套打断协议。
-
-Easy-Turn 的 `wait`（「闭嘴 / 停」）更接近 Interrupt，不是 Turn。覆盖图里的 `wait` 指这个状态，不是 HumDial 那种拒识轨。
 
 也报告交互信号的：[FDB v3](#4-任务与工具)（接话 / 打断）、[MTR-DuplexBench](#3-多轮内容)（会话特征）。
 

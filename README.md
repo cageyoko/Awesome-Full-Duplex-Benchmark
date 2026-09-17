@@ -52,7 +52,7 @@ One row is one protocol. Empty cell = not the main claim, not "impossible".
 | **TurnBench** | | EOT | | ✓ | | | ✓ | | | | | Component | Event | |
 | **Talking Turns** | | ✓ | ✓ | ✓ | | | | | | | | Component | Offline | |
 | **HumDial-FDBench** | | | | ✓ | | ✓ | ✓ | | | | | System | Challenge | ✓ |
-| **Easy-Turn** | | ✓ | ✓ | wait | | | | | | | | Component | Event | ✓ |
+| **Easy-Turn** | | ✓ | ✓ | ✓ | | | | | | | | Component | Event | ✓ |
 | **TurnSense** | | EOU | | | | | | | | | | Component | Offline | |
 
 \* Optional judge. Timing-only v1.5 runs are still valid.
@@ -86,7 +86,7 @@ When to speak, when to stop, when not to speak. Do **not** average these subclas
 | **SID-Bench** | 2026 | Interrupt / Filter | Component | Event | Real | Code + data | EN / ZH | FIR, IRL, APT | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 | **TurnBench** | 2026 | Turn (EOT) / Interrupt | Component | Event | Real | Code + data | EN | EOT / INT recall, false positives, timing; public leaderboard | [arXiv](https://arxiv.org/abs/2608.25218)/[Site](https://turnbench.sesame.com/)/[Github](https://github.com/SesameAILabs/turnbench)/[Blog](https://www.sesame.com/blog/turnbench) |
 | **Talking Turns** | 2025 | Turn / Backchannel / Interrupt | Component | Offline | Real | — | EN | Turn change, backchannel, interruption, floor-taking interruption. Eval platform promised; no public scorer found. | [arXiv](https://arxiv.org/abs/2503.01174)/[Apple](https://machinelearning.apple.com/research/talking-turns) |
-| **Easy-Turn** | 2025 | Turn / Backchannel | Component | Event | Mixed | Code + data | ZH | Four-state detector (complete / incomplete / backchannel / wait) on its own testset, not a system replay bench | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
+| **Easy-Turn** | 2025 | Turn / Backchannel / Interrupt | Component | Event | Mixed | Code + data | ZH / EN | Four-state detector (complete / incomplete / backchannel / wait) on its own testset, not a system replay bench | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
 | **TurnSense** (latishab) | 2025 | Turn (EOU) | Component | Offline | Text | Code + weights | EN | Text-level EOU on TURNS-2K. Not Bairong/brgroup TurnSense (ZH/EN audio). | [Github](https://github.com/latishab/turnsense)/[Dataset](https://huggingface.co/datasets/latishab/turns-2k) |
 
 \* FDB-Zh currently ships a subset of v1.5 (user backchannel is the one commonly released). Do not assume full ZH parity with English.
@@ -94,8 +94,6 @@ When to speak, when to stop, when not to speak. Do **not** average these subclas
 v1.5 overlap scenes: user interruption, user backchannel, talking to others, background speech. Papers often report **responsive** (stop and answer) vs **floor-holding** (filter overlap and keep talking). Neither is universally better; the bench is descriptive.
 
 TurnBench interruption scoring on the **user** channel works for endpointers and cascaded systems. Native full-duplex models that speak while listening need a different interrupt protocol.
-
-Easy-Turn `wait` (“shut up” / “please stop”) is closer to Interrupt than to Turn. The coverage-map `wait` mark is that state, not a HumDial-style reject track.
 
 Also reports interaction signals: [FDB v3](#4-task-and-tools) (take-turn / interrupt), [MTR-DuplexBench](#3-multi-turn-content) (conversational features).
 
