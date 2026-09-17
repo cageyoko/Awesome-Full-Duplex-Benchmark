@@ -4,12 +4,12 @@ This list is for **evaluation**. A new model with a two-page "we also report TOR
 
 ## Add or fix an entry
 
-1. Open a PR against `README.md`.
+1. Open a PR that updates **both** `README.md` (English) and `README.zh-CN.md` (Chinese). The two files must stay in sync.
 2. Put the row in the section that matches **what is scored**, not the paper title.
-3. Fill every legend column. Use `—` or `?` instead of inventing a value.
+3. Fill every legend column. Use `—` or `?` instead of inventing a value. Keep Focus / Protocol / Stimulus / Open tags in English in both files.
 4. Link arXiv / venue, code, data, and demo when they exist. Do not link a GitHub that is only a paper PDF.
 5. In **Headline metrics**, write the short names and the direction (↑/↓) if it is not obvious. If TOR flips by task, say so.
-6. If you have run the bench, a one-line caveat in [Metric notes](README.md#metric-notes) is more useful than another adjective in the title.
+6. If you have run the bench, a one-line caveat in [Metric notes](README.md#metric-notes) / [指标注意事项](README.zh-CN.md#指标注意事项) is more useful than another adjective in the title.
 
 ## Suggested PR title
 
@@ -24,4 +24,4 @@ This list is for **evaluation**. A new model with a two-page "we also report TOR
 
 ## Local preview
 
-This repo is a single Markdown file. GitHub rendering is the preview.
+GitHub rendering of `README.md` / `README.zh-CN.md` is the preview.

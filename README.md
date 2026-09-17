@@ -1,5 +1,7 @@
 # Awesome Full-Duplex Benchmark [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
+**English | [中文](README.zh-CN.md)**
+
 A curated list of **evaluation** resources for full-duplex spoken dialogue: benchmarks, metrics, protocols, challenge sets, and component-level tests.
 
 Models and training data live in the sister list: [Awesome-Full-Duplex-SDM](https://github.com/Ruiqi-Yan/Awesome-Full-Duplex-SDM). This repo is for people who actually run evals.
@@ -231,4 +233,4 @@ These are the details that make two papers incomparable if you ignore them.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Short version: add a row with Focus / Protocol / Stimulus / Open / Lang / headline metrics, and say what the number is *not*.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Short version: add a row with Focus / Protocol / Stimulus / Open / Lang / headline metrics, and say what the number is *not*. Update **both** `README.md` and `README.zh-CN.md`.
