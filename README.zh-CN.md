@@ -10,15 +10,15 @@
 
 ### 图例
 
-**Class（能力大类）** — 这个分数在说什么。协议和赛制不是大类。
+**Class（能力大类）** — 这个分数在说什么。协议和赛制不是大类。每个大类有一份短说明，在 [`docs/`](docs/README.zh-CN.md)。
 
 | Class | 小类 | 含义 |
 |:--|:--|:--|
-| **Interaction** | Pause / Turn / Backchannel / Interrupt / Filter / Reject | 何时说、何时停、何时不说。 |
-| **Timing** | Response latency / Stop latency / First audio / Tempo | 快慢和节奏。快不等于对。 |
-| **Content** | Instruction / Correction / Entity / Post-interrupt / Safety | 系统已经开过口、或被打断之后，话还对不对。 |
-| **Task** | Tool select / Args / Chain / Disfluency | 用户还在说话时把事办成。纯闲聊可标 N/A。 |
-| **Speech** | Intelligibility / Prosody / Noise / Stability | 音频能不能用。论文覆盖薄，产品不能省。 |
+| **[Interaction](docs/interaction.zh-CN.md)** | Pause / Turn / Backchannel / Interrupt / Filter / Reject | 何时说、何时停、何时不说。 |
+| **[Timing](docs/timing.zh-CN.md)** | Response latency / Stop latency / First audio / Tempo | 快慢和节奏。快不等于对。 |
+| **[Content](docs/content.zh-CN.md)** | Instruction / Correction / Entity / Post-interrupt / Safety | 系统已经开过口、或被打断之后，话还对不对。 |
+| **[Task](docs/task.zh-CN.md)** | Tool select / Args / Chain / Disfluency | 用户还在说话时把事办成。纯闲聊可标 N/A。 |
+| **[Speech](docs/speech.zh-CN.md)** | Intelligibility / Prosody / Noise / Stability | 音频能不能用。论文覆盖薄，产品不能省。 |
 
 **How（考法）** — 系统怎么被考。这些是列，不是章节。
 
@@ -61,11 +61,11 @@
 
 ## 目录
 
-- [1. 交互控制](#1-交互控制)
-- [2. 时序](#2-时序)
-- [3. 多轮内容](#3-多轮内容)
-- [4. 任务与工具](#4-任务与工具)
-- [5. 语音与稳健](#5-语音与稳健)
+- [1. 交互控制](#1-交互控制) · [说明](docs/interaction.zh-CN.md)
+- [2. 时序](#2-时序) · [说明](docs/timing.zh-CN.md)
+- [3. 多轮内容](#3-多轮内容) · [说明](docs/content.zh-CN.md)
+- [4. 任务与工具](#4-任务与工具) · [说明](docs/task.zh-CN.md)
+- [5. 语音与稳健](#5-语音与稳健) · [说明](docs/speech.zh-CN.md)
 - [评测数据与刺激](#评测数据与刺激)
 - [指标注意事项](#指标注意事项)
 - [综述](#综述)

@@ -14,7 +14,7 @@ Sections follow **what is scored**, not the repo or the venue:
 
 ## Add or fix an entry
 
-1. Open a PR that updates **both** `README.md` (English) and `README.zh-CN.md` (Chinese). The two files must stay in sync.
+1. Open a PR that updates **both** `README.md` (English) and `README.zh-CN.md` (Chinese). The two files must stay in sync. If you change a Class or subclass definition, update the matching notes under `docs/` (`*.md` and `*.zh-CN.md`).
 2. Put the row in the class that matches **what is scored**. Duplicate the row if it is first-class in a second class (for example FDB v1 under Interaction and Timing).
 3. Fill Class / Subclass, Granularity, Protocol, Stimulus (`Synthetic` / `Real` / `Mixed` / `Text`), Open (`Code + data` / `Code + weights` / `Code` / `Data` / `—`). Use `—` or `?` instead of inventing a value. Keep these tags in English in both files. Do not write `ZH / EN` unless both languages have a released eval split.
 4. Link arXiv / venue, code, data, and demo when they exist. Do not link a GitHub that is only a paper PDF.

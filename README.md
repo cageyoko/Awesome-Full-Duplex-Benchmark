@@ -10,15 +10,15 @@ Welcome to PR if you want to add a benchmark, metric definition, or a note about
 
 ### Legend
 
-**Class** — what the score is about. Protocol and venue are not classes.
+**Class** — what the score is about. Protocol and venue are not classes. Each class has a short note under [`docs/`](docs/README.md).
 
 | Class | Subclass | Meaning |
 |:--|:--|:--|
-| **Interaction** | Pause / Turn / Backchannel / Interrupt / Filter / Reject | When to speak, stop, or stay silent. |
-| **Timing** | Response latency / Stop latency / First audio / Tempo | How fast and on what rhythm. Not the same as being correct. |
-| **Content** | Instruction / Correction / Entity / Post-interrupt / Safety | Whether the words are right after the system has already spoken or been cut off. |
-| **Task** | Tool select / Args / Chain / Disfluency | Getting work done while the user is talking. Idle-chat systems may mark this N/A. |
-| **Speech** | Intelligibility / Prosody / Noise / Stability | Whether the audio is usable. Papers under-cover this; products cannot. |
+| **[Interaction](docs/interaction.md)** | Pause / Turn / Backchannel / Interrupt / Filter / Reject | When to speak, stop, or stay silent. |
+| **[Timing](docs/timing.md)** | Response latency / Stop latency / First audio / Tempo | How fast and on what rhythm. Not the same as being correct. |
+| **[Content](docs/content.md)** | Instruction / Correction / Entity / Post-interrupt / Safety | Whether the words are right after the system has already spoken or been cut off. |
+| **[Task](docs/task.md)** | Tool select / Args / Chain / Disfluency | Getting work done while the user is talking. Idle-chat systems may mark this N/A. |
+| **[Speech](docs/speech.md)** | Intelligibility / Prosody / Noise / Stability | Whether the audio is usable. Papers under-cover this; products cannot. |
 
 **How** — how the system is exercised. These are columns, not sections.
 
@@ -61,11 +61,11 @@ One row is one protocol. Empty cell = not the main claim, not "impossible".
 
 ## Contents
 
-- [1. Interaction control](#1-interaction-control)
-- [2. Timing](#2-timing)
-- [3. Multi-turn content](#3-multi-turn-content)
-- [4. Task and tools](#4-task-and-tools)
-- [5. Speech and robustness](#5-speech-and-robustness)
+- [1. Interaction control](#1-interaction-control) · [note](docs/interaction.md)
+- [2. Timing](#2-timing) · [note](docs/timing.md)
+- [3. Multi-turn content](#3-multi-turn-content) · [note](docs/content.md)
+- [4. Task and tools](#4-task-and-tools) · [note](docs/task.md)
+- [5. Speech and robustness](#5-speech-and-robustness) · [note](docs/speech.md)
 - [Eval datasets and stimuli](#eval-datasets-and-stimuli)
 - [Metric notes](#metric-notes)
 - [Surveys](#surveys)
