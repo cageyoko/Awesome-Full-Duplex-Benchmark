@@ -54,6 +54,8 @@
 | **HumDial-FDBench** | | | | ✓ | | ✓ | ✓ | | | | | System | Challenge | ✓ |
 | **Easy-Turn** | | ✓ | ✓ | ✓ | | | | | | | | Component | Event | ✓ |
 | **TurnSense** | | EOU | | | | | | | | | | Component | Offline | |
+| **τ-Voice** | | ✓ | ✓ | ✓ | ✓ | | ✓ | | | ✓ | | System | Interactive | |
+| **Audio MultiChallenge** | | | | | | | | | ✓ | | | System | Offline | |
 
 \* 可选 judge。只跑 v1.5 时序仍然有效。
 
@@ -66,6 +68,7 @@
 - [3. 多轮内容](#3-多轮内容) · [说明](docs/content.zh-CN.md)
 - [4. 任务与工具](#4-任务与工具) · [说明](docs/task.zh-CN.md)
 - [5. 语音与稳健](#5-语音与稳健) · [说明](docs/speech.zh-CN.md)
+- [相邻：语音理解与半双工 Agent](#相邻语音理解与半双工-agent)
 - [评测数据与刺激](#评测数据与刺激)
 - [指标注意事项](#指标注意事项)
 - [综述](#综述)
@@ -88,6 +91,7 @@
 | **Talking Turns** | 2025 | Turn / Backchannel / Interrupt | Component | Offline | Real | — | EN | 轮次切换、附和、打断、抢话打断。论文承诺开源评测台，未见可用的公开 scorer | [arXiv](https://arxiv.org/abs/2503.01174)/[Apple](https://machinelearning.apple.com/research/talking-turns) |
 | **Easy-Turn** | 2025 | Turn / Backchannel / Interrupt | Component | Event | Mixed | Code + data | ZH / EN | 四态检测器（complete / incomplete / backchannel / wait），自有 testset，不是系统回放 bench | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
 | **TurnSense**（latishab） | 2025 | Turn（EOU） | Component | Offline | Text | Code + weights | EN | 文本级 EOU，数据是 TURNS-2K。不是百融/brgroup 的 TurnSense（中英音频） | [Github](https://github.com/latishab/turnsense)/[Dataset](https://huggingface.co/datasets/latishab/turns-2k) |
+| **τ-Voice** | 2026 | Turn / Interrupt / Backchannel / Filter | System | Interactive | Mixed | Code + data | EN | 响应率、打断率、选择性（忽略附和 / 旁话）。交互有分，但 pass@1 是 Task 分 | [arXiv](https://arxiv.org/abs/2603.13686)/[Github](https://github.com/sierra-research/tau2-bench)/[Blog](https://sierra.ai/blog/tau-voice-benchmarking-real-time-voice-agents-on-real-world-tasks) |
 
 \* FDB-Zh 目前只放出 v1.5 的子集（常见的是用户附和）。不要默认中文覆盖等于英文。
 
@@ -95,7 +99,7 @@ v1.5 重叠场景：用户打断、用户附和、对旁人说话、背景语音
 
 TurnBench 在 **用户** 通道上打打断，对 endpoint 和级联系统成立。边听边说的原生全双工模型需要另一套打断协议。
 
-也报告交互信号的：[FDB v3](#4-任务与工具)（接话 / 打断）、[MTR-DuplexBench](#3-多轮内容)（会话特征）。
+也报告交互信号的：[FDB v3](#4-任务与工具)（接话 / 打断）、[MTR-DuplexBench](#3-多轮内容)（会话特征）、[τ-Voice](#4-任务与工具)（打断率 / 选择性）。
 
 ---
 
@@ -112,6 +116,7 @@ TurnBench 在 **用户** 通道上打打断，对 endpoint 和级联系统成立
 | **SID-Bench** | 2026 | Stop latency | Component | Event | Real | Code + data | EN / ZH | IRL；APT 把误打断和慢打断折在一起 | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 | **HumDial-FDBench** | 2026 | Response latency | System | Challenge | Real | Code + data | ZH / EN | 时延分（Final 的 0.2） | [arXiv](https://arxiv.org/abs/2604.21406)/[Github](https://github.com/ASLP-lab/HumDial-FDBench) |
 | **Full-Duplex-Bench v3** | 2026 | Response / first audio | System | Replay | Real | Code + data | EN | 首词、调工具、任务完成时延 | [arXiv](https://arxiv.org/abs/2604.04847)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **τ-Voice** | 2026 | Response latency | System | Interactive | Mixed | Code + data | EN | Clean vs Realistic 下的语音交互时延 | [arXiv](https://arxiv.org/abs/2603.13686)/[Github](https://github.com/sierra-research/tau2-bench) |
 
 首音 / 首包时延是产品指标。几乎没有论文把它当独立 bench；对比 API 时仍然应该报。
 
@@ -126,8 +131,11 @@ TurnBench 在 **用户** 通道上打打断，对 endpoint 和级联系统成立
 | **Full-Duplex-Bench v2** | 2025 | Instruction / Correction / Entity / Safety | System | Interactive | Mixed | Code + data | EN | 轮次流畅度、指令遵循、纠错、实体追踪、安全 | [arXiv](https://arxiv.org/abs/2510.07838)/[ACL](https://aclanthology.org/2026.acl-short.4)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **MTR-DuplexBench** | 2025 | Instruction / Safety（+ 对话质量） | System | Replay + 切轮 | Mixed | — | EN | 切轮后逐轮打会话 / 质量 / 指令遵循 / 安全 | [arXiv](https://arxiv.org/abs/2511.10262) |
 | **Full-Duplex-Bench v1** | 2025 | Post-interrupt | System | Replay | Mixed | Code + data | EN / ZH | 打断 GPT 分（可选 judge） | [arXiv](https://arxiv.org/abs/2503.04721)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **Audio MultiChallenge** | 2025 | Instruction / Correction / Entity | System | Offline | Real | Data | EN | 量表通过率：Inference Memory、Instruction Retention、Self Coherence、Voice Editing（句中改口） | [arXiv](https://arxiv.org/abs/2512.14865)/[ACL](https://aclanthology.org/2026.acl-long.1654/)/[Dataset](https://huggingface.co/datasets/ScaleAI/audiomc)/[Leaderboard](https://scale.com/leaderboard/audiomc) |
 
 FDB-v2 任务族：Daily、Correction、Entity Tracking、Safety。两种节奏：Fast vs Slow。
+
+Audio MultiChallenge 是多轮 **上下文**，再打一条回复 — Offline，不是现场考官。Voice Editing 是 Correction；Audio-Cue 记忆是 Entity，不是交互 TOR。
 
 ---
 
@@ -138,8 +146,13 @@ FDB-v2 任务族：Daily、Correction、Entity Tracking、Safety。两种节奏�
 | 标题 | 年 | 小类 | 粒度 | Protocol | Stimulus | Open | 语言 | 核心指标 | 资源 |
 |:--|:-:|:--|:-:|:-:|:-:|:-:|:-:|:--|:-:|
 | **Full-Duplex-Bench v3** | 2026 | Tool select / Args / Chain / Disfluency | System | Replay | 真人不流畅 | Code + data | EN | Tool F1、参数准确率、Pass@1、接话、打断 / 填充词、时延 | [arXiv](https://arxiv.org/abs/2604.04847)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench)/[Demo](https://daniellin94144.github.io/FDB-v3-demo) |
+| **τ-Voice** | 2026 | Tool select / Args / Chain / Disfluency | System | Interactive | Mixed | Code + data | EN | 相对文本 τ²-bench 的 pass@1（278 道零售 / 航司 / 电信题）；Clean vs Realistic（噪声 / 口音 / 轮次） | [arXiv](https://arxiv.org/abs/2603.13686)/[Github](https://github.com/sierra-research/tau2-bench)/[Blog](https://sierra.ai/blog/tau-voice-benchmarking-real-time-voice-agents-on-real-world-tasks) |
 
 v3 不流畅标签：填充词、停顿、犹豫、假开始、自我修正。领域：出行、金融、住房、电商。自我修正 + 多步工具链是常见失败点。
+
+τ-Voice 复用 τ²-bench 的工具、政策和数据库核对。Task 分是 pass@1。打断率 / 选择性归 Interaction；时延归 Timing。纯文本 τ-bench / BFCL 不进这个列表。
+
+Gemini 博客还报过闭源的 **ComplexFuncBench Audio** 函数调用集。公开的 [ComplexFuncBench](https://github.com/zai-org/ComplexFuncBench) 是文本；音频版在这里不是可复跑协议。
 
 ---
 
@@ -154,6 +167,20 @@ v3 不流畅标签：填充词、停顿、犹豫、假开始、自我修正。�
 | **SID-Bench** | 2026 | Noise | Component | Event | Real | Code + data | EN / ZH | 噪声 / 静音上的 APT 与 FIR | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 
 仍缺独立公开 bench 的：回声 / 串音、无响应率、中途掉线、以及针对模型语音的可懂度集。产品评测即使论文列表填不满，也该自己补。
+
+---
+
+## 相邻：语音理解与半双工 Agent
+
+这些打的是 **语音进、内容或工具**，不是全双工地板控制。GPT Realtime / Gemini Live 的数字经常出现在这里。不要和交互 TOR 混比。
+
+| 标题 | 年 | 打什么分 | 为什么是相邻 | Open | 语言 | 资源 |
+|:--|:-:|:--|:--|:-:|:-:|:--|
+| **VoiceBench** | 2024 | 知识、指令遵循、安全；口音 / 混响 | 语音问答，没有重叠协议 | Code + data | EN | [arXiv](https://arxiv.org/abs/2410.17196)/[Github](https://github.com/MatthewCYM/VoiceBench) |
+| **WildSpeech-Bench** | 2025 | 单轮 S2S 内容、副语言、噪声 | 真人问句，仍是一问一答，不是双工 | Code + data | EN | [arXiv](https://arxiv.org/abs/2506.21875)/[Github](https://github.com/Tencent/WildSpeech-Bench)/[Dataset](https://huggingface.co/datasets/tencent/WildSpeech-Bench) |
+| **VocalBench** | 2025 | 回复质量、声学、会话流畅 | 半双工语音对话；有中文子集 | Code + data | EN / ZH | [arXiv](https://arxiv.org/abs/2505.15727)/[Github](https://github.com/SJTU-OmniAgent/VocalBench)/[中文](https://github.com/SJTU-OmniAgent/VocalBench-zh) |
+| **VoiceAgentBench** | 2025 | 选工具 / 填参 / 多步 / 安全 | 会调工具，不打抢话 | Code + data | EN + 印度语 | [arXiv](https://arxiv.org/abs/2510.07978)/[Github](https://github.com/ola-krutrim/VoiceAgentBench)/[Dataset](https://huggingface.co/datasets/krutrim-ai-labs/VoiceAgentBench) |
+| **AudioCRAG** | 2025 | 带网页 / 知识图谱工具的语音事实问答 | 语音 RAG（出自 Stream RAG），不考地板 | Data | EN | [arXiv](https://arxiv.org/abs/2510.02044) |
 
 ---
 
@@ -172,6 +199,8 @@ v3 不流畅标签：填充词、停顿、犹豫、假开始、自我修正。�
 | **HumDial-FDBench audio** | 2026 | HumDial | Data | 带重叠的双通道真人对话 | [Hugging Face](https://huggingface.co/datasets/ASLP-lab/HumDial-FDBench) |
 | **TurnBench conversations** | 2026 | TurnBench | Data | 约 30 小时棚内双通道，6 类对话，三人标注 EOT / INT | [Viewer](https://turnbench.sesame.com/conversations) |
 | **Game-Time tasks** | 2025 | Game-Time | Data | 时序 / 语速 / 同步类游戏任务 | [Hugging Face](https://huggingface.co/datasets/gametime-benchmark/gametime) |
+| **Audio MultiChallenge** | 2025 | Audio MultiChallenge | Data | 452 段真人多轮对话，47 名说话人，1,712 条量表 | [Hugging Face](https://huggingface.co/datasets/ScaleAI/audiomc) |
+| **τ²-bench 任务** | 2025 | τ-Voice | Code + data | 278 道零售 / 航司 / 电信工具题；语音层是模拟器，不是静态波形集 | [Github](https://github.com/sierra-research/tau2-bench) |
 
 训练规模的双工语料（DuplexChat、DuplexGen、SmoothConv、SOMMELIER 等）放在 [模型向列表](https://github.com/Ruiqi-Yan/Awesome-Full-Duplex-SDM#datasets)。
 
@@ -190,6 +219,7 @@ v3 不流畅标签：填充词、停顿、犹豫、假开始、自我修正。�
 7. **Judge 指标可选且贵。** FDB v1 打断 GPT 分、v1.5 行为 / 韵律 judge 需要额外模型凭证。只跑时序仍然有效；不要把有 judge 和没 judge 的榜混在一起。
 8. **中文覆盖不均匀。** 不少论文写 multilingual，只是因为有一个中文子集。声称中文结果前，先核对哪些任务真的翻译了。
 9. **组件 ≠ 系统。** EOT 检测器分数不是对话产品分数。粒度要写在明处。Challenge 分数只在该冻结协议下可比。
+10. **相邻 ≠ 交互。** VoiceBench / WildSpeech / VocalBench 是语音理解。那边分高，不代表能把地板握住。τ-Voice 的 pass@1 是 Task；打断率才是 Interaction。
 
 ---
 
@@ -211,4 +241,4 @@ v3 不流畅标签：填充词、停顿、犹豫、假开始、自我修正。�
 
 ## 贡献
 
-见 [CONTRIBUTING.md](CONTRIBUTING.md)。行要放进 **被打分的那个大类**。同一篇可以出现两次。`README.md` 和 `README.zh-CN.md` **两边都要改**。
+见 [CONTRIBUTING.md](CONTRIBUTING.md)（[中文](CONTRIBUTING.zh-CN.md)）。条目放进**实际被打分的那个大类**，不要按会议或仓库归堆。同一篇论文可以出现在多个大类。改表时必须同时改 **`README.md` 和 `README.zh-CN.md`**。

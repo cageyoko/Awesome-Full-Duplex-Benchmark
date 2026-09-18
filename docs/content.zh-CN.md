@@ -26,4 +26,4 @@
 | **Post-interrupt** | 你还在出声时改了意图 | 旧句作废，接新意图 | [停话时延](timing.zh-CN.md) 是时间；这里是停下后说的话 |
 | **Safety** | 诱导做不该做的 | 拒绝或降级 | 可能和「很听话」的 Instruction / Interrupt 分打架 |
 
-FDB v1 的打断 GPT 分是 Post-interrupt（可选 judge）。FDB v2 在 Fast / Slow 两种节奏下考 Instruction / Correction / Entity / Safety。
+FDB v1 的打断 GPT 分是 Post-interrupt（可选 judge）。FDB v2 在 Fast / Slow 两种节奏下考 Instruction / Correction / Entity / Safety。Audio MultiChallenge 是 Offline 多轮上下文再打一条回复：Instruction Retention、Voice Editing（Correction）、Inference Memory / Audio-Cue（Entity）。
