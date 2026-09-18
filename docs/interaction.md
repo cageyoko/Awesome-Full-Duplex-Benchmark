@@ -33,6 +33,6 @@ Backchannel has two directions. FDB v1 ICC asks whether the *system* backchannel
 
 ## Where it shows up
 
-FDB v1 (pause / turn / BC / interrupt), FDB v1.5 (interrupt / BC / filter), FD-Bench, HumDial (interrupt / reject), SID-Bench, TurnBench, Talking Turns, Easy-Turn (complete / incomplete / backchannel / wait).
+FDB v1 (pause / turn / BC / interrupt), FDB v1.5 (interrupt / BC / filter), FD-Bench, HumDial (interrupt / reject), SID-Bench, TurnBench, Talking Turns, Easy-Turn (complete / incomplete / backchannel / wait), τ-Voice (responsiveness / interrupt rate / selectivity).
 
 See [Metric notes](../README.md#metric-notes) for TOR direction and the FDB backchannel rule (`< 1 s` and `≤ 3` words).

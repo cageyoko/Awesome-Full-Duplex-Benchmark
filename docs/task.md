@@ -15,6 +15,6 @@ This class scores **getting work done while the user is talking** — tools, arg
 | **Chain** | Multi-step calls stay consistent | Step 1 works, step 2 uses a stale id; Pass@1 dies |
 | **Disfluency** | Still correct under filler, pause, hesitation, false start, self-correction | Treats a restart as a second intent; calls twice |
 
-FDB v3 is the main open duplex tool bench (real disfluent speech, four domains). τ-Voice (grounded customer-service tools + duplex user sim) is the other first-class paper in this class and is not yet a row in the main list.
+FDB v3 is the main open duplex tool bench with **real** disfluent speech (four domains). τ-Voice is the other first-class row: 278 τ²-bench customer-service tasks, a full-duplex user simulator, and pass@1 against the database. Its interrupt rate / selectivity sit in [Interaction](interaction.md); latency sits in [Timing](timing.md).
 
-VoiceAgentBench / AudioCRAG are spoken tool-use but not full-duplex floor control. Text τ-bench / BFCL stay off this list.
+VoiceAgentBench / AudioCRAG are spoken tool-use but not full-duplex floor control — they live under Adjacent. Text τ-bench / BFCL stay off this list.

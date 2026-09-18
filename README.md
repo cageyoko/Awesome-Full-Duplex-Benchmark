@@ -54,6 +54,8 @@ One row is one protocol. Empty cell = not the main claim, not "impossible".
 | **HumDial-FDBench** | | | | ✓ | | ✓ | ✓ | | | | | System | Challenge | ✓ |
 | **Easy-Turn** | | ✓ | ✓ | ✓ | | | | | | | | Component | Event | ✓ |
 | **TurnSense** | | EOU | | | | | | | | | | Component | Offline | |
+| **τ-Voice** | | ✓ | ✓ | ✓ | ✓ | | ✓ | | | ✓ | | System | Interactive | |
+| **Audio MultiChallenge** | | | | | | | | | ✓ | | | System | Offline | |
 
 \* Optional judge. Timing-only v1.5 runs are still valid.
 
@@ -66,6 +68,7 @@ One row is one protocol. Empty cell = not the main claim, not "impossible".
 - [3. Multi-turn content](#3-multi-turn-content) · [note](docs/content.md)
 - [4. Task and tools](#4-task-and-tools) · [note](docs/task.md)
 - [5. Speech and robustness](#5-speech-and-robustness) · [note](docs/speech.md)
+- [Adjacent: spoken understanding and half-duplex agents](#adjacent-spoken-understanding-and-half-duplex-agents)
 - [Eval datasets and stimuli](#eval-datasets-and-stimuli)
 - [Metric notes](#metric-notes)
 - [Surveys](#surveys)
@@ -88,6 +91,7 @@ When to speak, when to stop, when not to speak. Do **not** average these subclas
 | **Talking Turns** | 2025 | Turn / Backchannel / Interrupt | Component | Offline | Real | — | EN | Turn change, backchannel, interruption, floor-taking interruption. Eval platform promised; no public scorer found. | [arXiv](https://arxiv.org/abs/2503.01174)/[Apple](https://machinelearning.apple.com/research/talking-turns) |
 | **Easy-Turn** | 2025 | Turn / Backchannel / Interrupt | Component | Event | Mixed | Code + data | ZH / EN | Four-state detector (complete / incomplete / backchannel / wait) on its own testset, not a system replay bench | [arXiv](https://arxiv.org/abs/2509.23938)/[Github](https://github.com/ASLP-lab/Easy-Turn)/[Demo](https://aslp-lab.github.io/Easy-Turn/) |
 | **TurnSense** (latishab) | 2025 | Turn (EOU) | Component | Offline | Text | Code + weights | EN | Text-level EOU on TURNS-2K. Not Bairong/brgroup TurnSense (ZH/EN audio). | [Github](https://github.com/latishab/turnsense)/[Dataset](https://huggingface.co/datasets/latishab/turns-2k) |
+| **τ-Voice** | 2026 | Turn / Interrupt / Backchannel / Filter | System | Interactive | Mixed | Code + data | EN | Responsiveness, interrupt rate, selectivity (ignore BC / side talk). Interaction is scored, but pass@1 is the Task number. | [arXiv](https://arxiv.org/abs/2603.13686)/[Github](https://github.com/sierra-research/tau2-bench)/[Blog](https://sierra.ai/blog/tau-voice-benchmarking-real-time-voice-agents-on-real-world-tasks) |
 
 \* FDB-Zh currently ships a subset of v1.5 (user backchannel is the one commonly released). Do not assume full ZH parity with English.
 
@@ -95,7 +99,7 @@ v1.5 overlap scenes: user interruption, user backchannel, talking to others, bac
 
 TurnBench interruption scoring on the **user** channel works for endpointers and cascaded systems. Native full-duplex models that speak while listening need a different interrupt protocol.
 
-Also reports interaction signals: [FDB v3](#4-task-and-tools) (take-turn / interrupt), [MTR-DuplexBench](#3-multi-turn-content) (conversational features).
+Also reports interaction signals: [FDB v3](#4-task-and-tools) (take-turn / interrupt), [MTR-DuplexBench](#3-multi-turn-content) (conversational features), [τ-Voice](#4-task-and-tools) (interrupt rate / selectivity).
 
 ---
 
@@ -112,6 +116,7 @@ How fast, and on what rhythm. A system can be fast and still barge in on pauses.
 | **SID-Bench** | 2026 | Stop latency | Component | Event | Real | Code + data | EN / ZH | IRL; APT folds false and slow interrupts | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 | **HumDial-FDBench** | 2026 | Response latency | System | Challenge | Real | Code + data | ZH / EN | Delay score (0.2 of Final) | [arXiv](https://arxiv.org/abs/2604.21406)/[Github](https://github.com/ASLP-lab/HumDial-FDBench) |
 | **Full-Duplex-Bench v3** | 2026 | Response / first audio | System | Replay | Real | Code + data | EN | First-word, tool-call, and task-completion latency | [arXiv](https://arxiv.org/abs/2604.04847)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **τ-Voice** | 2026 | Response latency | System | Interactive | Mixed | Code + data | EN | Voice-interaction latency under Clean vs Realistic | [arXiv](https://arxiv.org/abs/2603.13686)/[Github](https://github.com/sierra-research/tau2-bench) |
 
 First-audio / first-packet latency is a product metric. Almost no paper treats it as a first-class bench; still report it when comparing APIs.
 
@@ -126,8 +131,11 @@ Whether the words stay right after the system has spoken, been interrupted, or b
 | **Full-Duplex-Bench v2** | 2025 | Instruction / Correction / Entity / Safety | System | Interactive | Mixed | Code + data | EN | Turn-taking fluency, instruction following, correction, entity tracking, safety | [arXiv](https://arxiv.org/abs/2510.07838)/[ACL](https://aclanthology.org/2026.acl-short.4)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **MTR-DuplexBench** | 2025 | Instruction / Safety (+ dialogue quality) | System | Replay + segment | Mixed | — | EN | Per-turn conversational / quality / IF / safety after segmentation | [arXiv](https://arxiv.org/abs/2511.10262) |
 | **Full-Duplex-Bench v1** | 2025 | Post-interrupt | System | Replay | Mixed | Code + data | EN / ZH | Interruption GPT score (optional judge) | [arXiv](https://arxiv.org/abs/2503.04721)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
+| **Audio MultiChallenge** | 2025 | Instruction / Correction / Entity | System | Offline | Real | Data | EN | Rubric pass rate: Inference Memory, Instruction Retention, Self Coherence, Voice Editing (mid-utterance repair) | [arXiv](https://arxiv.org/abs/2512.14865)/[ACL](https://aclanthology.org/2026.acl-long.1654/)/[Dataset](https://huggingface.co/datasets/ScaleAI/audiomc)/[Leaderboard](https://scale.com/leaderboard/audiomc) |
 
 FDB-v2 task families: Daily, Correction, Entity Tracking, Safety. Two pacing setups: Fast vs Slow.
+
+Audio MultiChallenge is multi-turn **context**, then one scored response — Offline, not a live examiner. Voice Editing is Correction; Audio-Cue memory is Entity, not Interaction TOR.
 
 ---
 
@@ -138,8 +146,13 @@ Getting work done while the user is disfluent. Chat-only systems should mark thi
 | Title | Year | Subclass | Granularity | Protocol | Stimulus | Open | Lang | Headline metrics | Resources |
 |:--|:-:|:--|:-:|:-:|:-:|:-:|:-:|:--|:-:|
 | **Full-Duplex-Bench v3** | 2026 | Tool select / Args / Chain / Disfluency | System | Replay | Real disfluency | Code + data | EN | Tool F1, argument accuracy, Pass@1, take-turn, interrupt / filler, latency | [arXiv](https://arxiv.org/abs/2604.04847)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench)/[Demo](https://daniellin94144.github.io/FDB-v3-demo) |
+| **τ-Voice** | 2026 | Tool select / Args / Chain / Disfluency | System | Interactive | Mixed | Code + data | EN | pass@1 vs text τ²-bench (278 retail / airline / telecom tasks); Clean vs Realistic (noise / accent / turn-taking) | [arXiv](https://arxiv.org/abs/2603.13686)/[Github](https://github.com/sierra-research/tau2-bench)/[Blog](https://sierra.ai/blog/tau-voice-benchmarking-real-time-voice-agents-on-real-world-tasks) |
 
 v3 disfluency tags: filler, pause, hesitation, false start, self-correction. Domains: travel, finance, housing, e-commerce. Self-correction + chained tool calls are the common failure mode.
+
+τ-Voice reuses τ²-bench tools, policies, and database checks. The Task number is pass@1. Interrupt rate / selectivity belong in Interaction; latency belongs in Timing. Text-only τ-bench / BFCL stay off this list.
+
+Gemini blogs also cite a closed **ComplexFuncBench Audio** function-calling set. The public [ComplexFuncBench](https://github.com/zai-org/ComplexFuncBench) is text; the audio variant is not a rerunnable protocol here.
 
 ---
 
@@ -154,6 +167,20 @@ Whether the audio is usable. This class is thin in the literature and should sti
 | **SID-Bench** | 2026 | Noise | Component | Event | Real | Code + data | EN / ZH | Noise / silence APT and FIR | [arXiv](https://arxiv.org/abs/2603.24144)/[Github](https://github.com/xkx-hub/SID-bench) |
 
 Still missing as first-class public benches: echo / channel bleed, no-response rate, dropouts, and a standalone intelligibility set for model speech. Product evals should add them even when the paper list cannot.
+
+---
+
+## Adjacent: spoken understanding and half-duplex agents
+
+These score **speech-in content or tools**, not full-duplex floor control. GPT Realtime / Gemini Live numbers often appear here. Do not mix them with Interaction TOR.
+
+| Title | Year | What is scored | Why adjacent | Open | Lang | Resources |
+|:--|:-:|:--|:--|:-:|:-:|:--|
+| **VoiceBench** | 2024 | Knowledge, instruction following, safety under accent / reverb | Speech-in QA; no overlap protocol | Code + data | EN | [arXiv](https://arxiv.org/abs/2410.17196)/[Github](https://github.com/MatthewCYM/VoiceBench) |
+| **WildSpeech-Bench** | 2025 | Single-turn S2S content, paralinguistics, noise | Real spoken queries; still one-shot, not duplex | Code + data | EN | [arXiv](https://arxiv.org/abs/2506.21875)/[Github](https://github.com/Tencent/WildSpeech-Bench)/[Dataset](https://huggingface.co/datasets/tencent/WildSpeech-Bench) |
+| **VocalBench** | 2025 | Response quality, acoustics, conversational flow | Half-duplex vocal conversation; has a ZH split | Code + data | EN / ZH | [arXiv](https://arxiv.org/abs/2505.15727)/[Github](https://github.com/SJTU-OmniAgent/VocalBench)/[ZH](https://github.com/SJTU-OmniAgent/VocalBench-zh) |
+| **VoiceAgentBench** | 2025 | Tool select / args / chain / safety | Spoken tools, no barge-in scoring | Code + data | EN + Indic | [arXiv](https://arxiv.org/abs/2510.07978)/[Github](https://github.com/ola-krutrim/VoiceAgentBench)/[Dataset](https://huggingface.co/datasets/krutrim-ai-labs/VoiceAgentBench) |
+| **AudioCRAG** | 2025 | Spoken factual QA with web / KG tools | Spoken RAG (from Stream RAG); not floor control | Data | EN | [arXiv](https://arxiv.org/abs/2510.02044) |
 
 ---
 
@@ -172,6 +199,8 @@ Not training corpora. These are the audio sources benches actually stream or ann
 | **HumDial-FDBench audio** | 2026 | HumDial | Data | Dual-channel real conversations with overlap | [Hugging Face](https://huggingface.co/datasets/ASLP-lab/HumDial-FDBench) |
 | **TurnBench conversations** | 2026 | TurnBench | Data | ~30 h studio dual-channel, 6 conversation types, 3-annotator EOT / INT | [Viewer](https://turnbench.sesame.com/conversations) |
 | **Game-Time tasks** | 2025 | Game-Time | Data | Timing / tempo / sync game-like tasks | [Hugging Face](https://huggingface.co/datasets/gametime-benchmark/gametime) |
+| **Audio MultiChallenge** | 2025 | Audio MultiChallenge | Data | 452 real multi-turn conversations, 47 speakers, 1,712 rubrics | [Hugging Face](https://huggingface.co/datasets/ScaleAI/audiomc) |
+| **τ²-bench tasks** | 2025 | τ-Voice | Code + data | 278 retail / airline / telecom tool tasks; voice layer is a simulator, not a static waveform set | [Github](https://github.com/sierra-research/tau2-bench) |
 
 Training-scale duplex corpora (DuplexChat, DuplexGen, SmoothConv, SOMMELIER, …) stay on the [model-centric list](https://github.com/Ruiqi-Yan/Awesome-Full-Duplex-SDM#datasets).
 
@@ -190,6 +219,7 @@ These are the details that make two papers incomparable if you ignore them.
 7. **Judge metrics are optional and expensive.** FDB v1 interruption GPT scores and v1.5 behavior / prosody judges need extra model credentials. Timing-only runs are still valid; do not mix judged and unjudged leaderboards.
 8. **ZH coverage is uneven.** Many papers list "multilingual" because one Chinese subset exists. Check which tasks are actually translated before claiming a Chinese result.
 9. **Component ≠ system.** An EOT detector score is not a dialogue-product score. Keep Granularity visible. A Challenge number is comparable only under that frozen protocol.
+10. **Adjacent ≠ Interaction.** VoiceBench / WildSpeech / VocalBench are speech understanding. A high number there does not mean the model can hold the floor. τ-Voice pass@1 is Task; its interrupt rate is Interaction.
 
 ---
 
@@ -211,4 +241,4 @@ These are the details that make two papers incomparable if you ignore them.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Put the row in the **class that is scored**. The same paper may appear twice. Update **both** `README.md` and `README.zh-CN.md`.
+See [CONTRIBUTING.md](CONTRIBUTING.md) ([中文](CONTRIBUTING.zh-CN.md)). Put each row in the **class that is actually scored**, not the venue or the repo. The same paper may appear in more than one class. Always update **both** `README.md` and `README.zh-CN.md`.

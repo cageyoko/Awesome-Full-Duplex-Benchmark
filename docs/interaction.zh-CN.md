@@ -33,6 +33,6 @@ Reject = 「正确否定」的打分桶
 
 ## 出现在哪些 bench
 
-FDB v1（停顿 / 轮次 / 附和 / 打断）、FDB v1.5（打断 / 附和 / 过滤）、FD-Bench、HumDial（打断 / 拒识）、SID-Bench、TurnBench、Talking Turns、Easy-Turn（complete / incomplete / backchannel / wait）。
+FDB v1（停顿 / 轮次 / 附和 / 打断）、FDB v1.5（打断 / 附和 / 过滤）、FD-Bench、HumDial（打断 / 拒识）、SID-Bench、TurnBench、Talking Turns、Easy-Turn（complete / incomplete / backchannel / wait）、τ-Voice（响应率 / 打断率 / 选择性）。
 
 TOR 方向和 FDB 附和规则（`< 1 秒` 且 `≤ 3` 词）见 [指标注意事项](../README.zh-CN.md#指标注意事项)。

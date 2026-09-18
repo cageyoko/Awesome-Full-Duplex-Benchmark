@@ -15,6 +15,6 @@
 | **Chain** | 多步调用还能对上 | 第一步对，第二步用了过期 id；Pass@1 直接挂 |
 | **Disfluency** | 填充词、停顿、犹豫、假开始、自我修正下仍然对 | 把改口当成第二个意图，调两次 |
 
-目前公开的全双工工具 bench 主要是 FDB v3（真人 disfluency，四个领域）。τ-Voice（接地客服工具 + 全双工用户模拟）也是这一类的主论文，主表里还没单独成行。
+目前公开的全双工工具 bench：FDB v3（**真人** disfluency，四个领域），以及 τ-Voice（278 道 τ²-bench 客服题 + 全双工用户模拟，按数据库打 pass@1）。打断率 / 选择性在 [交互](interaction.zh-CN.md)；时延在 [时序](timing.zh-CN.md)。
 
-VoiceAgentBench / AudioCRAG 会调工具，但不考全双工抢话。文本 τ-bench / BFCL 不进这个列表。
+VoiceAgentBench / AudioCRAG 会调工具，但不考全双工抢话 — 放在「相邻」。文本 τ-bench / BFCL 不进这个列表。

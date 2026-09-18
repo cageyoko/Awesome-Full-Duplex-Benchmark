@@ -13,7 +13,7 @@ user speaking | user stops | you start | you speaking | user barges in | you sto
 
 | Subclass | Clock starts | Clock stops | What it asks | Typical benches |
 |:--|:--|:--|:--|:--|
-| **Response latency** | User yielded the floor | You start speaking | Are you slow to take a real turn? | FDB v1 takeover latency, HumDial delay |
+| **Response latency** | User yielded the floor | You start speaking | Are you slow to take a real turn? | FDB v1 takeover latency, HumDial delay, τ-Voice |
 | **Stop latency** | User starts an interrupt | You go silent | After a barge-in, how long until you shut up? | FDB v1.5 stop latency, SID IRL |
 | **First audio** | The system is allowed to generate | First audible frame / first packet | Pipeline delay (VAD → model → TTS → net), not “will you take the turn” | Product TTFB; parts of FDB v3 |
 | **Tempo** | A time structure the task imposes | Whether you hit it | Rate, deadlines, intentional overlap / sync | Game-Time |
