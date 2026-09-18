@@ -10,7 +10,7 @@
 
 | 小类 | 在问什么 | 现在有什么 |
 |:--|:--|:--|
-| **Intelligibility** | 人 / ASR 能不能听清模型语音 | FD-Bench 对模型音频的 WER。没有独立的全双工可懂度集 |
+| **Intelligibility** | 人 / ASR 能不能听清模型语音 | FD-Bench 打的是 **模型** 音频 WER。AA-WER（`VoxPopuli-Cleaned-AA`、`Earnings22-Cleaned-AA`、未公开的 AgentTalk）打的是 **用户/ASR** 转写，不是同一个对象 |
 | **Prosody** | 重叠之后音量、语速、切停像不像人 | FDB v1.5 可选韵律 judge |
 | **Noise** | 背景音、回声、串音 | SID 噪声/静音；FD-Bench NIRate。真人双通道比 TTS 抢话狠 |
 | **Stability** | 无响应、卡死、播到一半掉线 | 几乎没有论文 bench。对比 API 时仍应报 |

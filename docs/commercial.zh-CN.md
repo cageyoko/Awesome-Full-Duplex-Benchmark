@@ -11,8 +11,8 @@
 | 种类 | 谁跑 | 常见集 | 能声称什么 |
 |:--|:--|:--|:--|
 | **官方主打** | 厂商自己 | Big Bench Audio、VoiceBench、ComplexFuncBench Audio、内部 MOS | 协议是他们定的。常常不是交互 TOR |
-| **第三方差全双工** | FDB / τ-Voice 等 | FDB v2–v3、τ-Voice | 地板 + 工具可横向比（前提是真的打了这个 API） |
-| **第三方相邻** | Scale、VoiceBench 作者、Coval | Audio MultiChallenge、VoiceBench、WildSpeech | 内容 / 时延。不要和 [交互](interaction.zh-CN.md) 混 |
+| **第三方差全双工** | FDB / τ-Voice / [Artificial Analysis](https://artificialanalysis.ai/speech-to-speech) | FDB（AA 用子集）、τ-Voice | 地板 + 工具可横向比（前提是真的打了这个 API） |
+| **第三方相邻** | Scale、VoiceBench 作者、Coval、AA | Audio MultiChallenge、VoiceBench、WildSpeech、Big Bench Audio | 内容 / 推理 / 时延。不要和 [交互](interaction.zh-CN.md) 混 |
 
 好几个其实不是「数据集」。FDB v2、τ-Voice、OpenAI 的 RUN、Seed 的真人测，都是 **协议**（模拟器、考官或现场通话），不是一包冻住的 wav。
 
@@ -26,7 +26,7 @@
 | 内部字母数字串（电话 / VIN，多语） | 内容 / 语音 | 没有公开划分 | 同上 |
 | Cookbook **CRAWL / WALK / RUN** | 时序 / 交互 / 任务 | 他们推荐的产品评测。RUN 是全双工模拟主叫；文档写明借鉴了 τ-Voice。不是放出的共享集 | [Realtime eval guide](https://developers.openai.com/cookbook/examples/audio/voice_agent_evaluation) |
 
-第三方还会拿 Realtime 跑 [FDB v2](../README.zh-CN.md#3-多轮内容)、[FDB v3](../README.zh-CN.md#4-任务与工具)、[τ-Voice](../README.zh-CN.md#4-任务与工具)、[Audio MultiChallenge](../README.zh-CN.md#3-多轮内容)。
+第三方还会拿 Realtime 跑 [FDB v2](../README.zh-CN.md#3-多轮内容)、[FDB v3](../README.zh-CN.md#4-任务与工具)、[τ-Voice](../README.zh-CN.md#4-任务与工具)、[Audio MultiChallenge](../README.zh-CN.md#3-多轮内容)，以及 [AA Speech-to-Speech 指数](#artificial-analysis-speech-to-speech-指数)。
 
 ### Gemini Live / Native Audio（Google）
 
@@ -42,11 +42,11 @@
 
 | 他们报 | 对应大类 | 说明 | 来源 |
 |:--|:--|:--|:--|
-| **Big Bench Audio** | 相邻（音频推理） | 自称第一，Artificial Analysis 独立核对 | [Grok Voice Agent API](https://x.ai/news/grok-voice-agent-api) |
+| **Big Bench Audio** | 相邻（音频推理） | 发版自称；AA 也把它当作 S2S 指数的推理腿 | [Grok Voice Agent API](https://x.ai/news/grok-voice-agent-api) |
 | 首音时延 | 时序 | 产品宣称亚秒 | 同上 |
 | 对人盲测 vs OpenAI Realtime | 语音 | 发音 / 口音 / 韵律，不是 TOR | 同上 |
 
-第三方还会拿 Grok Voice 跑 FDB v3 和 τ-Voice。Audio MultiChallenge 论文表里没有它。
+第三方还会拿 Grok Voice 跑 FDB v3、τ-Voice 和 AA 的 S2S 指数。Audio MultiChallenge 论文表里没有它。
 
 ### Seeduplex / SeedDuplex（字节 Seed）
 
@@ -68,7 +68,28 @@
 | ASR / S2TT / 音乐集 | — | 理解，不是双工 | 同上 |
 | 首包时延（234 ms） | 时序 | 系统测量，不是 FDB | 同上 |
 
-技术报告 **没有** 把 FDB 或 τ-Voice 当主打。Audio MultiChallenge 里有 Qwen3-Omni（音频输出，24.34% pass）。
+技术报告 **没有** 把 FDB 或 τ-Voice 当主打。Audio MultiChallenge 里有 Qwen3-Omni（音频输出，24.34% pass）。AA 的 S2S 榜现在也列了 Qwen realtime 在 Big Bench Audio / FDB / τ-Voice 上的分。
+
+## Artificial Analysis Speech-to-Speech 指数
+
+这是主要的 **独立商业记分牌**，不是新协议。[公告](https://artificialanalysis.ai/articles/announcing-the-artificial-analysis-speech-to-speech-index) / [实时榜](https://artificialanalysis.ai/speech-to-speech)。他们托管或清洗的数据在 [huggingface.co/datasets/ArtificialAnalysis](https://huggingface.co/datasets/ArtificialAnalysis)。
+
+三腿等权（旁边另报 TTFA / 价格）：
+
+| AA 腿 | 对应这里 | 公开产物 | 不是 |
+|:--|:--|:--|:--|
+| **Speech Reasoning** | 相邻（音频推理） | [Big Bench Audio](https://huggingface.co/datasets/ArtificialAnalysis/big_bench_audio) — 1,000 条英文 TTS，来自 BBH（Formal Fallacies、Navigate、Object Counting、Web of Lies） | 你已经开过口之后的指令 |
+| **Conversational Dynamics** | 交互 | Full-Duplex-Bench **子集**（停顿 / 轮次 / 打断 / 附和） | 他们的合成分 ≠ FDB 论文原表 |
+| **Agentic Performance** | 任务 | τ-Voice（航司 / 零售 / 电信） | Cookbook RUN |
+
+**不要**把 AA 的一个百分数当成交互 TOR。它平均了三个大类。
+
+同一 HF 组织里、**不是** S2S 对话的：
+
+| HF 仓库 | AA 产品 | 对应大类 |
+|:--|:--|:--|
+| `VoxPopuli-Cleaned-AA`、`Earnings22-Cleaned-AA` | [AA-WER](https://artificialanalysis.ai/articles/aa-wer-v2) 转写（另有未公开的 **AA-AgentTalk**） | [语音](speech.zh-CN.md) 转写，不是双工模型语音 |
+| `AA-LCR`、`AA-Omniscience-Public`、`AA-Briefcase-Lite`、`ITBench-AA` | 文本 Intelligence Index | 不进这个列表 |
 
 ## 第三方覆盖（谁真的被打过）
 
@@ -82,14 +103,15 @@
 | **Audio MultiChallenge** | ✓ | ✓ | | | ✓ |
 | **VoiceBench** | GPT-4o-Audio* | ✓ | | | ✓（官方） |
 | **Coval S2S** | ✓ | ✓ | | | |
+| **AA S2S 指数** | ✓ | ✓ | ✓ | | ✓* |
 
-\* VoiceBench 表里常见的是 GPT-4o-Audio，不一定是后来的 Realtime SKU。
+\* VoiceBench 表里常见的是 GPT-4o-Audio，不一定是后来的 Realtime SKU。AA 后来的 S2S 榜列了 Qwen realtime；Seeduplex 仍没出现。
 
-如果只要一套能同时打到 GPT、Gemini、Grok **地板 + 工具** 的公开栈：FDB v3 和 τ-Voice。多轮内容再加 Audio MultiChallenge。Seed / Qwen 的空缺，不要用 VoiceBench 或 MOS 去填 Interaction。
+如果只要一套能同时打到 GPT、Gemini、Grok **地板 + 工具** 的公开栈：FDB v3 和 τ-Voice — 或者看 AA 指数但必须 **拆开三腿**。多轮内容再加 Audio MultiChallenge。Seed 的空缺，不要用 VoiceBench 或 MOS 去填 Interaction。
 
 ## 不要混比
 
-1. Big Bench Audio / VoiceBench / MMAU ≠ [交互](interaction.zh-CN.md) 的 TOR。
+1. Big Bench Audio / VoiceBench / MMAU / AA 合成分 ≠ [交互](interaction.zh-CN.md) 的 TOR。
 2. ComplexFuncBench Audio ≠ FDB v3 / τ-Voice。同属任务大类，协议不同，而且音频集闭源。
 3. Seed 的 MOS 差值是对豆包半双工，不是对 GPT。
 4. OpenAI RUN 和 τ-Voice 是近亲，不是同一套 harness。Cookbook 分数不是 τ-Voice 的 pass@1。

@@ -134,9 +134,13 @@ Whether the words stay right after the system has spoken, been interrupted, or b
 | **Full-Duplex-Bench v1** | 2025 | Post-interrupt | System | Replay | Mixed | Code + data | EN / ZH | Interruption GPT score (optional judge) | [arXiv](https://arxiv.org/abs/2503.04721)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **Audio MultiChallenge** | 2025 | Instruction / Correction / Entity | System | Offline | Real | Data | EN | Rubric pass rate: Inference Memory, Instruction Retention, Self Coherence, Voice Editing (mid-utterance repair) | [arXiv](https://arxiv.org/abs/2512.14865)/[ACL](https://aclanthology.org/2026.acl-long.1654/)/[Dataset](https://huggingface.co/datasets/ScaleAI/audiomc)/[Leaderboard](https://scale.com/leaderboard/audiomc) |
 
-FDB-v2 task families: Daily, Correction, Entity Tracking, Safety. Two pacing setups: Fast vs Slow.
+FDB-v2 task families: Daily (Instruction), Correction, Entity Tracking, Safety (11 policy classes). Two pacing setups: Fast vs Slow. Turn-taking fluency on this bench is Interaction, not Content.
 
-Audio MultiChallenge is multi-turn **context**, then one scored response — Offline, not a live examiner. Voice Editing is Correction; Audio-Cue memory is Entity, not Interaction TOR.
+Audio MultiChallenge is multi-turn **context**, then one scored response — Offline, not a live examiner. Voice Editing is Correction; Audio-Cue memory is Entity, not Interaction TOR. Self Coherence is an axis, not a sixth subclass.
+
+MTR IF / safety items are spoken QA reused after segmentation (Llama Question, AdvBench), not FDB-v2-style staged goals. User Correction ≠ FDB v3 self-correction (that is Task Disfluency).
+
+Subclass-to-bench map, adjacent spoken-QA sets, and ZH gaps: [content note](docs/content.md).
 
 ---
 
@@ -182,6 +186,13 @@ These score **speech-in content or tools**, not full-duplex floor control. GPT R
 | **VocalBench** | 2025 | Response quality, acoustics, conversational flow | Half-duplex vocal conversation; has a ZH split | Code + data | EN / ZH | [arXiv](https://arxiv.org/abs/2505.15727)/[Github](https://github.com/SJTU-OmniAgent/VocalBench)/[ZH](https://github.com/SJTU-OmniAgent/VocalBench-zh) |
 | **VoiceAgentBench** | 2025 | Tool select / args / chain / safety | Spoken tools, no barge-in scoring | Code + data | EN + Indic | [arXiv](https://arxiv.org/abs/2510.07978)/[Github](https://github.com/ola-krutrim/VoiceAgentBench)/[Dataset](https://huggingface.co/datasets/krutrim-ai-labs/VoiceAgentBench) |
 | **AudioCRAG** | 2025 | Spoken factual QA with web / KG tools | Spoken RAG (from Stream RAG); not floor control | Data | EN | [arXiv](https://arxiv.org/abs/2510.02044) |
+| **URO-Bench** | 2025 | S2S understanding / reasoning / oral, incl. multi-round | Turn-based spoken dialogue; has ZH | Code + data | EN / ZH | [arXiv](https://arxiv.org/abs/2502.17810)/[Github](https://github.com/Ruiqi-Yan/URO-Bench)/[Dataset](https://huggingface.co/datasets/Honggao/URO-Bench) |
+| **VoiceAssistant-Eval** | 2025 | Listening / speaking / viewing; multi-round IF and safety | Omni assistant, not duplex overlap | Code + data | EN | [arXiv](https://arxiv.org/abs/2509.22651)/[Github](https://github.com/mathllm/VoiceAssistant-Eval) |
+| **SpeechInstructBench** | 2025 | ZH/EN instruction following (closed / open / adjustment) | Half-duplex IF under accent / noise / disfluency | Code + data | ZH / EN | [arXiv](https://arxiv.org/abs/2503.02769)/[Github](https://github.com/dingdongwang/SpeechInstructBench) |
+| **Speech-IFEval** | 2025 | Text output constraints on speech models | Isolates IF forgetting from ASR; not dialogue floor | Code | EN | [arXiv](https://arxiv.org/abs/2505.19037)/[Github](https://github.com/kehanlu/Speech-IFEval) |
+| **TELEVAL** | 2025 | ZH content fulfillment + interactional appropriateness | User-centered Chinese SLM; not an FDB examiner | Code + data | ZH | [arXiv](https://arxiv.org/abs/2507.18061)/[Github](https://github.com/Tele-AI/TELEVAL)/[Dataset](https://huggingface.co/datasets/Tele-AI/TELEVAL) |
+| **Big Bench Audio** | 2024 | Audio reasoning (BBH TTS: fallacies / navigate / count / web of lies) | Vendor + AA headline; not floor control | Data | EN | [Hugging Face](https://huggingface.co/datasets/ArtificialAnalysis/big_bench_audio)/[AA S2S](https://artificialanalysis.ai/speech-to-speech) |
+| **AA Speech-to-Speech Index** | 2026 | Equal mix of BBA + FDB subset + τ-Voice; also TTFA | Composite scoreboard, not a new protocol. Split the three legs | — | EN | [Board](https://artificialanalysis.ai/speech-to-speech)/[Note](https://artificialanalysis.ai/articles/announcing-the-artificial-analysis-speech-to-speech-index)/[HF org](https://huggingface.co/datasets/ArtificialAnalysis) |
 
 ---
 
@@ -202,6 +213,9 @@ Not training corpora. These are the audio sources benches actually stream or ann
 | **Game-Time tasks** | 2025 | Game-Time | Data | Timing / tempo / sync game-like tasks | [Hugging Face](https://huggingface.co/datasets/gametime-benchmark/gametime) |
 | **Audio MultiChallenge** | 2025 | Audio MultiChallenge | Data | 452 real multi-turn conversations, 47 speakers, 1,712 rubrics | [Hugging Face](https://huggingface.co/datasets/ScaleAI/audiomc) |
 | **τ²-bench tasks** | 2025 | τ-Voice | Code + data | 278 retail / airline / telecom tool tasks; voice layer is a simulator, not a static waveform set | [Github](https://github.com/sierra-research/tau2-bench) |
+| **Big Bench Audio** | 2024 | AA S2S / vendor blogs | Data | 1,000 EN TTS questions, 23 Speech-Arena voices; not a duplex stream | [Hugging Face](https://huggingface.co/datasets/ArtificialAnalysis/big_bench_audio) |
+| **VoxPopuli-Cleaned-AA** | 2026 | AA-WER STT | Data | Cleaned parliament transcripts; 25% of AA-WER | [Hugging Face](https://huggingface.co/datasets/ArtificialAnalysis/VoxPopuli-Cleaned-AA) |
+| **Earnings22-Cleaned-AA** | 2026 | AA-WER STT | Data | Cleaned earnings-call transcripts; 25% of AA-WER | [Hugging Face](https://huggingface.co/datasets/ArtificialAnalysis/Earnings22-Cleaned-AA) |
 
 Training-scale duplex corpora (DuplexChat, DuplexGen, SmoothConv, SOMMELIER, …) stay on the [model-centric list](https://github.com/Ruiqi-Yan/Awesome-Full-Duplex-SDM#datasets).
 
@@ -220,7 +234,8 @@ These are the details that make two papers incomparable if you ignore them.
 7. **Judge metrics are optional and expensive.** FDB v1 interruption GPT scores and v1.5 behavior / prosody judges need extra model credentials. Timing-only runs are still valid; do not mix judged and unjudged leaderboards.
 8. **ZH coverage is uneven.** Many papers list "multilingual" because one Chinese subset exists. Check which tasks are actually translated before claiming a Chinese result.
 9. **Component ≠ system.** An EOT detector score is not a dialogue-product score. Keep Granularity visible. A Challenge number is comparable only under that frozen protocol.
-10. **Adjacent ≠ Interaction.** VoiceBench / WildSpeech / VocalBench are speech understanding. A high number there does not mean the model can hold the floor. τ-Voice pass@1 is Task; its interrupt rate is Interaction.
+10. **Adjacent ≠ Interaction.** VoiceBench / WildSpeech / VocalBench / Big Bench Audio are speech understanding or audio reasoning. A high number there does not mean the model can hold the floor. τ-Voice pass@1 is Task; its interrupt rate is Interaction.
+11. **AA S2S is three classes averaged.** Artificial Analysis equally weights Big Bench Audio, an FDB subset, and τ-Voice. Quote the legs, not only the composite. Their HF org also has STT cleans and text Intelligence sets — those are not duplex dialogue.
 
 ---
 
@@ -237,6 +252,7 @@ These are the details that make two papers incomparable if you ignore them.
 
 - [Awesome-Full-Duplex-SDM](https://github.com/Ruiqi-Yan/Awesome-Full-Duplex-SDM) — models, components, training datasets.
 - [Full-Duplex-Bench](https://github.com/DanielLin94144/Full-Duplex-Bench) — the main open eval suite (v1 / v1.5 / v2 / v3).
+- [Artificial Analysis Speech-to-Speech](https://artificialanalysis.ai/speech-to-speech) — independent board that reruns Big Bench Audio + an FDB subset + τ-Voice.
 
 ---
 

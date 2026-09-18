@@ -10,7 +10,7 @@ It is not [Interaction](interaction.md) (should you speak) and not [Timing](timi
 
 | Subclass | What it asks | What exists today |
 |:--|:--|:--|
-| **Intelligibility** | Can a person / ASR hear the model speech? | FD-Bench WER on model audio. No standalone public set for duplex model speech |
+| **Intelligibility** | Can a person / ASR hear the model speech? | FD-Bench WER on **model** audio. AA-WER (`VoxPopuli-Cleaned-AA`, `Earnings22-Cleaned-AA`, held-out AgentTalk) is **user/ASR** transcription, a different object |
 | **Prosody** | After overlap, does volume / rate / cut-off sound human? | Optional FDB v1.5 prosody judge |
 | **Noise** | Background speech, echo, channel bleed | SID noise/silence; FD-Bench NIRate. Real dual-channel is harsher than TTS barge-in |
 | **Stability** | No-response, hang, dropout mid-stream | Almost no paper bench. Report it anyway when comparing APIs |

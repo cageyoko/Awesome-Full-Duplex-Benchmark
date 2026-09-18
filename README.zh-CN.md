@@ -134,9 +134,13 @@ TurnBench 在 **用户** 通道上打打断，对 endpoint 和级联系统成立
 | **Full-Duplex-Bench v1** | 2025 | Post-interrupt | System | Replay | Mixed | Code + data | EN / ZH | 打断 GPT 分（可选 judge） | [arXiv](https://arxiv.org/abs/2503.04721)/[Github](https://github.com/DanielLin94144/Full-Duplex-Bench) |
 | **Audio MultiChallenge** | 2025 | Instruction / Correction / Entity | System | Offline | Real | Data | EN | 量表通过率：Inference Memory、Instruction Retention、Self Coherence、Voice Editing（句中改口） | [arXiv](https://arxiv.org/abs/2512.14865)/[ACL](https://aclanthology.org/2026.acl-long.1654/)/[Dataset](https://huggingface.co/datasets/ScaleAI/audiomc)/[Leaderboard](https://scale.com/leaderboard/audiomc) |
 
-FDB-v2 任务族：Daily、Correction、Entity Tracking、Safety。两种节奏：Fast vs Slow。
+FDB-v2 任务族：Daily（Instruction）、Correction、Entity Tracking、Safety（11 类政策）。两种节奏：Fast vs Slow。这张表上的轮次流畅度是交互，不是内容。
 
-Audio MultiChallenge 是多轮 **上下文**，再打一条回复 — Offline，不是现场考官。Voice Editing 是 Correction；Audio-Cue 记忆是 Entity，不是交互 TOR。
+Audio MultiChallenge 是多轮 **上下文**，再打一条回复 — Offline，不是现场考官。Voice Editing 是 Correction；Audio-Cue 记忆是 Entity，不是交互 TOR。Self Coherence 是打分轴，不是第六小类。
+
+MTR 的 IF / 安全题是切轮后复用的语音 QA（Llama Question、AdvBench），不是 FDB-v2 那种分阶段目标。用户改口 ≠ FDB v3 的自我修正（那是 Task Disfluency）。
+
+小类对照、相邻语音问答集、中文缺口见 [内容说明](docs/content.zh-CN.md)。
 
 ---
 
@@ -182,6 +186,13 @@ Gemini 博客还报过闭源的 **ComplexFuncBench Audio** 函数调用集。公
 | **VocalBench** | 2025 | 回复质量、声学、会话流畅 | 半双工语音对话；有中文子集 | Code + data | EN / ZH | [arXiv](https://arxiv.org/abs/2505.15727)/[Github](https://github.com/SJTU-OmniAgent/VocalBench)/[中文](https://github.com/SJTU-OmniAgent/VocalBench-zh) |
 | **VoiceAgentBench** | 2025 | 选工具 / 填参 / 多步 / 安全 | 会调工具，不打抢话 | Code + data | EN + 印度语 | [arXiv](https://arxiv.org/abs/2510.07978)/[Github](https://github.com/ola-krutrim/VoiceAgentBench)/[Dataset](https://huggingface.co/datasets/krutrim-ai-labs/VoiceAgentBench) |
 | **AudioCRAG** | 2025 | 带网页 / 知识图谱工具的语音事实问答 | 语音 RAG（出自 Stream RAG），不考地板 | Data | EN | [arXiv](https://arxiv.org/abs/2510.02044) |
+| **URO-Bench** | 2025 | S2S 理解 / 推理 / 口语，含多轮 | 轮转口语对话；有中文 | Code + data | EN / ZH | [arXiv](https://arxiv.org/abs/2502.17810)/[Github](https://github.com/Ruiqi-Yan/URO-Bench)/[Dataset](https://huggingface.co/datasets/Honggao/URO-Bench) |
+| **VoiceAssistant-Eval** | 2025 | 听 / 说 / 看；多轮 IF 与安全 | Omni 助手，不考叠说 | Code + data | EN | [arXiv](https://arxiv.org/abs/2509.22651)/[Github](https://github.com/mathllm/VoiceAssistant-Eval) |
+| **SpeechInstructBench** | 2025 | 中英指令遵循（封闭 / 开放 / 调整） | 半双工 IF，口音 / 噪声 / 不流畅 | Code + data | ZH / EN | [arXiv](https://arxiv.org/abs/2503.02769)/[Github](https://github.com/dingdongwang/SpeechInstructBench) |
+| **Speech-IFEval** | 2025 | 语音模型上的文本输出约束 | 把 IF 遗忘和 ASR 拆开；不是地板 | Code | EN | [arXiv](https://arxiv.org/abs/2505.19037)/[Github](https://github.com/kehanlu/Speech-IFEval) |
+| **TELEVAL** | 2025 | 中文内容兑现 + 交互得体 | 用户向中文 SLM，不是 FDB 考官 | Code + data | ZH | [arXiv](https://arxiv.org/abs/2507.18061)/[Github](https://github.com/Tele-AI/TELEVAL)/[Dataset](https://huggingface.co/datasets/Tele-AI/TELEVAL) |
+| **Big Bench Audio** | 2024 | 音频推理（BBH TTS：谬误 / 导航 / 计数 / Web of Lies） | 厂商 + AA 主打；不是地板 | Data | EN | [Hugging Face](https://huggingface.co/datasets/ArtificialAnalysis/big_bench_audio)/[AA S2S](https://artificialanalysis.ai/speech-to-speech) |
+| **AA Speech-to-Speech 指数** | 2026 | BBA + FDB 子集 + τ-Voice 等权；另报 TTFA | 合成记分牌，不是新协议。三腿要拆开看 | — | EN | [榜](https://artificialanalysis.ai/speech-to-speech)/[说明](https://artificialanalysis.ai/articles/announcing-the-artificial-analysis-speech-to-speech-index)/[HF 组织](https://huggingface.co/datasets/ArtificialAnalysis) |
 
 ---
 
@@ -202,6 +213,9 @@ Gemini 博客还报过闭源的 **ComplexFuncBench Audio** 函数调用集。公
 | **Game-Time tasks** | 2025 | Game-Time | Data | 时序 / 语速 / 同步类游戏任务 | [Hugging Face](https://huggingface.co/datasets/gametime-benchmark/gametime) |
 | **Audio MultiChallenge** | 2025 | Audio MultiChallenge | Data | 452 段真人多轮对话，47 名说话人，1,712 条量表 | [Hugging Face](https://huggingface.co/datasets/ScaleAI/audiomc) |
 | **τ²-bench 任务** | 2025 | τ-Voice | Code + data | 278 道零售 / 航司 / 电信工具题；语音层是模拟器，不是静态波形集 | [Github](https://github.com/sierra-research/tau2-bench) |
+| **Big Bench Audio** | 2024 | AA S2S / 厂商博客 | Data | 1,000 条英文 TTS，23 个 Speech Arena 音色；不是双工流 | [Hugging Face](https://huggingface.co/datasets/ArtificialAnalysis/big_bench_audio) |
+| **VoxPopuli-Cleaned-AA** | 2026 | AA-WER 转写 | Data | 清洗过的议会转写；AA-WER 的 25% | [Hugging Face](https://huggingface.co/datasets/ArtificialAnalysis/VoxPopuli-Cleaned-AA) |
+| **Earnings22-Cleaned-AA** | 2026 | AA-WER 转写 | Data | 清洗过的财报电话转写；AA-WER 的 25% | [Hugging Face](https://huggingface.co/datasets/ArtificialAnalysis/Earnings22-Cleaned-AA) |
 
 训练规模的双工语料（DuplexChat、DuplexGen、SmoothConv、SOMMELIER 等）放在 [模型向列表](https://github.com/Ruiqi-Yan/Awesome-Full-Duplex-SDM#datasets)。
 
@@ -220,7 +234,8 @@ Gemini 博客还报过闭源的 **ComplexFuncBench Audio** 函数调用集。公
 7. **Judge 指标可选且贵。** FDB v1 打断 GPT 分、v1.5 行为 / 韵律 judge 需要额外模型凭证。只跑时序仍然有效；不要把有 judge 和没 judge 的榜混在一起。
 8. **中文覆盖不均匀。** 不少论文写 multilingual，只是因为有一个中文子集。声称中文结果前，先核对哪些任务真的翻译了。
 9. **组件 ≠ 系统。** EOT 检测器分数不是对话产品分数。粒度要写在明处。Challenge 分数只在该冻结协议下可比。
-10. **相邻 ≠ 交互。** VoiceBench / WildSpeech / VocalBench 是语音理解。那边分高，不代表能把地板握住。τ-Voice 的 pass@1 是 Task；打断率才是 Interaction。
+10. **相邻 ≠ 交互。** VoiceBench / WildSpeech / VocalBench / Big Bench Audio 是语音理解或音频推理。那边分高，不代表能把地板握住。τ-Voice 的 pass@1 是 Task；打断率才是 Interaction。
+11. **AA S2S 是三个大类的平均。** Artificial Analysis 等权折 Big Bench Audio、FDB 子集和 τ-Voice。要报腿，不要只报合成分。他们 HF 组织里还有转写清洗和文本 Intelligence 集 — 那些不是全双工对话。
 
 ---
 
@@ -237,6 +252,7 @@ Gemini 博客还报过闭源的 **ComplexFuncBench Audio** 函数调用集。公
 
 - [Awesome-Full-Duplex-SDM](https://github.com/Ruiqi-Yan/Awesome-Full-Duplex-SDM) — 模型、组件、训练数据。
 - [Full-Duplex-Bench](https://github.com/DanielLin94144/Full-Duplex-Bench) — 目前最完整的开源评测套件（v1 / v1.5 / v2 / v3）。
+- [Artificial Analysis Speech-to-Speech](https://artificialanalysis.ai/speech-to-speech) — 独立榜：重跑 Big Bench Audio + FDB 子集 + τ-Voice。
 
 ---
 
