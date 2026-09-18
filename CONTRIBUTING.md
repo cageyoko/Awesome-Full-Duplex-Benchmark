@@ -23,6 +23,7 @@ Sections follow **what is scored**, not the repo or the venue:
 5. In **Headline metrics**, write the short names and the direction (↑/↓) if it is not obvious. If TOR flips by subclass, say so.
 6. If you have run the bench, a one-line caveat in [Metric notes](README.md#metric-notes) / [指标注意事项](README.zh-CN.md#指标注意事项) is more useful than another adjective in the title.
 7. Update the coverage map in both READMEs when the main claim changes.
+8. If a vendor launch post changes which set they headline, update `docs/commercial.md` and `docs/commercial.zh-CN.md`. Do not copy blog scores into the coverage map unless a public protocol exists.
 
 ## Suggested PR title
 

@@ -23,6 +23,7 @@
 5. **核心指标** 写短名，方向不明显时标 ↑/↓。TOR 随小类翻转时必须写明。
 6. 如果你跑过这个 bench，在 [指标注意事项](README.zh-CN.md#指标注意事项) / [Metric notes](README.md#metric-notes) 加一句 caveat，比在标题里再加形容词有用。
 7. 主声称变了，两边 README 的覆盖图都要改。
+8. 厂商发版博主打的集变了，同步改 `docs/commercial.md` 和 `docs/commercial.zh-CN.md`。没有可复跑协议的博客分数，不要抄进覆盖图。
 
 ## 建议的 PR 标题
 

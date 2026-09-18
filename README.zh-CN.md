@@ -69,6 +69,7 @@
 - [4. 任务与工具](#4-任务与工具) · [说明](docs/task.zh-CN.md)
 - [5. 语音与稳健](#5-语音与稳健) · [说明](docs/speech.zh-CN.md)
 - [相邻：语音理解与半双工 Agent](#相邻语音理解与半双工-agent)
+- [商业 API 主打评测](docs/commercial.zh-CN.md) · GPT / Gemini / Grok / Seed / Qwen 官方报哪些集
 - [评测数据与刺激](#评测数据与刺激)
 - [指标注意事项](#指标注意事项)
 - [综述](#综述)
@@ -172,7 +173,7 @@ Gemini 博客还报过闭源的 **ComplexFuncBench Audio** 函数调用集。公
 
 ## 相邻：语音理解与半双工 Agent
 
-这些打的是 **语音进、内容或工具**，不是全双工地板控制。GPT Realtime / Gemini Live 的数字经常出现在这里。不要和交互 TOR 混比。
+这些打的是 **语音进、内容或工具**，不是全双工地板控制。GPT Realtime / Gemini Live 的数字经常出现在这里。不要和交互 TOR 混比。各家*自己主打*哪些集，见 [商业 API 主打评测](docs/commercial.zh-CN.md)。
 
 | 标题 | 年 | 打什么分 | 为什么是相邻 | Open | 语言 | 资源 |
 |:--|:-:|:--|:--|:-:|:-:|:--|

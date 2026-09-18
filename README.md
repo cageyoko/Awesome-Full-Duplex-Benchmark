@@ -69,6 +69,7 @@ One row is one protocol. Empty cell = not the main claim, not "impossible".
 - [4. Task and tools](#4-task-and-tools) · [note](docs/task.md)
 - [5. Speech and robustness](#5-speech-and-robustness) · [note](docs/speech.md)
 - [Adjacent: spoken understanding and half-duplex agents](#adjacent-spoken-understanding-and-half-duplex-agents)
+- [Commercial API evals](docs/commercial.md) · which sets GPT / Gemini / Grok / Seed / Qwen headline
 - [Eval datasets and stimuli](#eval-datasets-and-stimuli)
 - [Metric notes](#metric-notes)
 - [Surveys](#surveys)
@@ -172,7 +173,7 @@ Still missing as first-class public benches: echo / channel bleed, no-response r
 
 ## Adjacent: spoken understanding and half-duplex agents
 
-These score **speech-in content or tools**, not full-duplex floor control. GPT Realtime / Gemini Live numbers often appear here. Do not mix them with Interaction TOR.
+These score **speech-in content or tools**, not full-duplex floor control. GPT Realtime / Gemini Live numbers often appear here. Do not mix them with Interaction TOR. Which set each vendor *headlines* is on [Commercial API evals](docs/commercial.md).
 
 | Title | Year | What is scored | Why adjacent | Open | Lang | Resources |
 |:--|:-:|:--|:--|:-:|:-:|:--|

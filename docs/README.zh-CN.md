@@ -12,4 +12,10 @@
 | Task | [task.zh-CN.md](task.zh-CN.md) |
 | Speech | [speech.zh-CN.md](speech.zh-CN.md) |
 
+不是第六大类 — 商业语音 API 主打什么，以及第三方全双工 bench 实际打了谁：
+
+| 页面 | 说明 |
+|:--|:--|
+| 商业 API 主打评测 | [commercial.zh-CN.md](commercial.zh-CN.md) |
+
 改定义时，英文和 `*.zh-CN.md` 要一起改。
